@@ -1,0 +1,38 @@
+{
+  "metadata" : {
+    "version" : "1.1.342.0",
+    "origin" : "",
+    "description" : "Workflow to test pipeline substitutions",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "action_trigger_1",
+    "type" : "datamorphairflow.actions.empty.DMEmptyOperator",
+    "nodeType" : "trigger",
+    "description" : "",
+    "properties" : {
+      "ui" : {
+        "x" : 25,
+        "y" : 25
+      },
+      "id" : "cc8f68f0-a058-4cb0-883e-acd4981fa4e1"
+    }
+  }, {
+    "name" : "datamorph_pipeline_1",
+    "type" : "datamorphairflow.actions.databricks.DMDatabricksRunNowJobOperator",
+    "nodeType" : "action",
+    "description" : "",
+    "properties" : {
+      "retries" : 0,
+      "outputTo" : [ "Success", "Failure" ],
+      "retry_delay" : 0,
+      "dependsOn" : [ "action_trigger_1" ],
+      "ui" : {
+        "x" : 266,
+        "y" : 65
+      },
+      "pipeline_id" : 3394,
+      "id" : "fc72fab1-fba5-4e0d-be42-a919043ba6e8"
+    }
+  } ]
+}
