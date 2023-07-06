@@ -1,0 +1,71 @@
+{
+  "metadata" : {
+    "version" : "1.1.342.0",
+    "origin" : "",
+    "description" : "",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "csv_1",
+    "type" : "filecsv",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "ignoreTrailingWhiteSpace" : false,
+      "designSchema" : 28,
+      "enforceSchema" : true,
+      "multiLine" : false,
+      "batch" : true,
+      "format" : "csv",
+      "distinct" : false,
+      "inferSchema" : false,
+      "samplingRatio" : 1,
+      "maxColumns" : 20480,
+      "path" : "file:///${outputDir}/customerloan.delta",
+      "ignoreLeadingWhiteSpace" : false,
+      "ui" : {
+        "x" : 25,
+        "y" : 25
+      },
+      "header" : false,
+      "maxCharsPerColumn" : -1,
+      "id" : "c03b2582-3a18-4bc4-98ff-5e8c9a8a7bf3",
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "sql_1",
+    "type" : "sql",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "csv_1" ],
+      "ui" : {
+        "x" : 177,
+        "y" : 58
+      },
+      "id" : "84c3b579-e51a-4eae-a425-4784bfe5abf5",
+      "sql" : "select id,\nname,\nage from csv_1"
+    }
+  }, {
+    "name" : "csv_2",
+    "type" : "filecsv",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "path" : "s3://datamorph-qa/output/",
+      "ignoreLeadingWhiteSpace" : true,
+      "ignoreTrailingWhiteSpace" : true,
+      "dependsOn" : [ "sql_1" ],
+      "ui" : {
+        "x" : 325,
+        "y" : 25
+      },
+      "escapeQuotes" : true,
+      "batch" : true,
+      "format" : "csv",
+      "header" : false,
+      "id" : "6e15c2d7-520a-4f18-9de5-08afb5b221b3",
+      "quoteAll" : false
+    }
+  } ]
+}
