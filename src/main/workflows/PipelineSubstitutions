@@ -3,7 +3,21 @@
     "version" : "1.1.342.0",
     "origin" : "",
     "description" : "Workflow to test pipeline substitutions",
-    "tags" : [ ]
+    "tags" : [ {
+      "id" : 5,
+      "name" : "demoTag",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656598933000,
+      "createdBy" : null
+    }, {
+      "id" : 2,
+      "name" : "testNew",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656576269000,
+      "createdBy" : null
+    } ]
   },
   "workflow" : [ {
     "name" : "action_trigger_1",
