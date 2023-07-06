@@ -3,21 +3,7 @@
     "version" : "1.1.342.0",
     "origin" : "",
     "description" : "",
-    "tags" : [ {
-      "id" : 2,
-      "name" : "testNew",
-      "type" : "DEFAULT",
-      "description" : null,
-      "createdDate" : 1656576269000,
-      "createdBy" : null
-    }, {
-      "id" : 4,
-      "name" : "pipelineTestTag",
-      "type" : "DEFAULT",
-      "description" : null,
-      "createdDate" : 1656577803000,
-      "createdBy" : null
-    } ]
+    "tags" : [ ]
   },
   "workflow" : [ {
     "name" : "csv_1",
