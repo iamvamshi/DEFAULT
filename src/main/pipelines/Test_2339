@@ -1,25 +1,33 @@
 {
   "metadata" : {
-    "version" : "1.1.342.0",
+    "version" : "1.1.395.0",
     "origin" : "",
     "description" : "",
     "tags" : [ {
+      "id" : 1,
+      "name" : "test",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656485405000,
+      "createdBy" : 1
+    }, {
       "id" : 256,
       "name" : "RRR",
       "type" : "DEFAULT",
       "description" : null,
       "createdDate" : 1662749668000,
       "createdBy" : 6
-    }, {
-      "id" : 1,
-      "name" : "test",
-      "type" : "DEFAULT",
-      "description" : null,
-      "createdDate" : 1656485405000,
-      "createdBy" : null
     } ]
   },
   "workflow" : [ {
+    "name" : "parameters",
+    "type" : "parameter",
+    "nodeType" : "parameter",
+    "description" : "",
+    "properties" : {
+      "test" : "test5"
+    }
+  }, {
     "name" : "csv_1",
     "type" : "filecsv",
     "nodeType" : "source",
