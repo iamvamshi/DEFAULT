@@ -1,0 +1,116 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "action_trigger_1",
+    "type" : "datamorphairflow.actions.empty.DMEmptyOperator",
+    "nodeType" : "trigger",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ ],
+      "ui" : {
+        "x" : 45,
+        "y" : 150
+      },
+      "id" : "dndnode_0.32830484645885205"
+    }
+  }, {
+    "name" : "branch_1",
+    "type" : "datamorphairflow.actions.branch.DMBranchOnReturnValueOperator",
+    "nodeType" : "action",
+    "description" : "",
+    "properties" : {
+      "retries" : 0,
+      "retry_delay" : 0,
+      "dependsOn" : [ "action_trigger_1" ],
+      "ui" : {
+        "x" : 225,
+        "y" : 150
+      },
+      "id" : "dndnode_0.35352452971824055",
+      "branches" : [ {
+        "name" : "success",
+        "properties" : {
+          "match_expression" : "TRUE",
+          "branch" : [ "email_1" ]
+        }
+      }, {
+        "name" : "failure",
+        "properties" : {
+          "match_expression" : "FALSE",
+          "branch" : [ "email_3" ]
+        }
+      } ]
+    }
+  }, {
+    "name" : "email_1",
+    "type" : "datamorphairflow.actions.email.DMEmailOperator",
+    "nodeType" : "action",
+    "description" : "",
+    "properties" : {
+      "cc" : "",
+      "retries" : 0,
+      "outputTo" : [ "Success", "Failure" ],
+      "html_content" : "test",
+      "from_id" : "vk@gmail.com",
+      "bcc" : "",
+      "dependsOn" : [ "branch_1:success" ],
+      "retry_delay" : 0,
+      "ui" : {
+        "x" : 390,
+        "y" : 60
+      },
+      "subject" : "demo",
+      "to" : "test@gmail.com",
+      "id" : "dndnode_0.5670291928755116"
+    }
+  }, {
+    "name" : "email_2",
+    "type" : "datamorphairflow.actions.email.DMEmailOperator",
+    "nodeType" : "action",
+    "description" : "",
+    "properties" : {
+      "cc" : "",
+      "retries" : 0,
+      "outputTo" : [ "Success", "Failure" ],
+      "html_content" : "dsdfsfds",
+      "from_id" : "test@gmail.com",
+      "bcc" : "",
+      "dependsOn" : [ "branch_1:failure" ],
+      "retry_delay" : 0,
+      "ui" : {
+        "x" : 390,
+        "y" : 165
+      },
+      "subject" : "q",
+      "to" : "test1@gmail.com",
+      "id" : "dndnode_0.5873263319720583"
+    }
+  }, {
+    "name" : "email_3",
+    "type" : "datamorphairflow.actions.email.DMEmailOperator",
+    "nodeType" : "action",
+    "description" : "",
+    "properties" : {
+      "cc" : "",
+      "retries" : 0,
+      "outputTo" : [ "Success", "Failure" ],
+      "html_content" : "dsadasdass",
+      "from_id" : "testNew",
+      "bcc" : "",
+      "dependsOn" : [ "branch_1:failure" ],
+      "retry_delay" : 0,
+      "ui" : {
+        "x" : 390,
+        "y" : 285
+      },
+      "subject" : "dsdsd",
+      "to" : "test",
+      "id" : "dndnode_0.9926356046608611"
+    }
+  } ]
+}
