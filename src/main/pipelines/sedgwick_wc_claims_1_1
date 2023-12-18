@@ -1,0 +1,762 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "WC pipeline from incoming to reporting",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "loc_lkup",
+    "type" : "table",
+    "nodeType" : "source",
+    "description" : "Claims Location Lookup Table",
+    "properties" : {
+      "designSchema" : 62,
+      "dependsOn" : [ ],
+      "ui" : {
+        "x" : 274,
+        "y" : 541
+      },
+      "format" : "table",
+      "distinct" : false,
+      "id" : "d0af6a0c-18cb-46bb-882d-01217ce72a86",
+      "table" : "erm_reporting.loc_lkup"
+    }
+  }, {
+    "name" : "sedwick_wc_daily",
+    "type" : "table",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "designSchema" : 52,
+      "dependsOn" : [ ],
+      "ui" : {
+        "x" : -207,
+        "y" : 109
+      },
+      "format" : "table",
+      "distinct" : false,
+      "id" : "8f35d3ce-09ad-4159-b40e-be084e365f5a",
+      "table" : "incoming.sedwick_wc_daily"
+    }
+  }, {
+    "name" : "sedwick_wc_monthly",
+    "type" : "table",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "designSchema" : 52,
+      "dependsOn" : [ ],
+      "ui" : {
+        "x" : -224,
+        "y" : 254
+      },
+      "format" : "table",
+      "distinct" : false,
+      "id" : "63e5a968-be72-4a41-99f0-11160e6f587c",
+      "table" : "incoming.sedwick_wc_monthly"
+    }
+  }, {
+    "name" : "incoming_sedgwick_wc",
+    "type" : "sql",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "sedwick_wc_daily", "sedwick_wc_monthly" ],
+      "ui" : {
+        "x" : -14,
+        "y" : 200
+      },
+      "id" : "81161dc3-d8b3-41f0-8b27-8e1d86fd4b89",
+      "sql" : "select   daily.insured_name1,\n           daily.org1_code,\n           daily.org2_code,\n           daily.org3_code,\n           daily.org1_desc,\n           daily.org2_desc,\n           daily.org3_desc,\n           daily.incident_date,\n           nvl(monthly.end_claimant_type_desc,'') as end_claimant_type_desc,\n           daily.claim_cause_code,\n           daily.claim_cause_desc,\n           daily.incident_type_code,\n           nvl(monthly.osha_loss_days,'') as osha_loss_days,\n           nvl(monthly.reserve_amount,'0.00') as reserve_amount,\n           daily.incident_type_desc,\n           daily.claim_number,\n           daily.osha_code,\n           nvl(monthly.end_status_desc,'') as end_status_desc,\n           daily.claim_add_date,\n           daily.accepted_date,\n           daily.denied_date,\n           daily.claimant_name,\n           daily.birth_date,\n           daily.hire_date,\n           daily.age_at_injury,\n           daily.location_knowledge_date,\n           daily.tpa_received_date,\n           nvl(monthly.end_claimant_closed_date,'          ') as end_claimant_closed_date,\n           daily.safety,\n           daily.litigated,\n           daily.subrogated,\n           daily.supervisor_full_name,\n           daily.incident_location_desc,\n           daily.incident_desc,\n           daily.injury_desc,\n           daily.body_part_code,\n           daily.body_part_desc,\n           daily.nature_of_injury_code,\n           daily.nature_of_injury_desc,\n           daily.occupation_code,\n           daily.occupation_desc,\n           daily.org4_code,\n           daily.org4_desc,\n           nvl(monthly.td_lost_days,'0.00') as monthly_td_lost_days,\n           nvl(monthly.osha_restricted_days,'0.00') as monthly_osha_restricted_days,\n           nvl(daily.osha_restricted_days,'0.00') as osha_restricted_days,\n           nvl(daily.td_lost_days,'0.00') as td_lost_days,\n           daily.insured_coordinator_date,\n           daily.employee_number,\n           daily.insured_reported_date,\n           daily.assigned_to_defense_date,\n           nvl(daily.work_comp_lost_days,'0.00') as work_comp_lost_days,\n           daily.administrator,\n           daily.representation_notice_date,\n           nvl(monthly.reserve_amount1,'0.00') as reserve_amount1,\n           nvl(monthly.reserve_amount4,'0.00') as reserve_amount4,\n           daily.body_part_group_code,\n           daily.body_part_group_desc,\n           daily.reporting_method,\n           daily.caller_group,\n           daily.osha_lineout_date,\n           daily.insurance_type_code,\n           daily.insurance_type_desc,\n           daily.client_code,\n           daily.client_desc,\n           daily.org5_code,\n           daily.org5_desc,\n           daily.org6_code,\n           daily.org6_desc,\n           daily.osha_privacy_indicator,\n           daily.claimant_work_phone,\n           daily.delayed_decision_date,\n           daily.days_per_week,\n           daily.hours_per_week,\n           daily.employment_type_code,\n           daily.employment_type_desc,\n           daily.full_pay_on_last_day,\n           daily.full_day_lost,\n           daily.still_off_work,\n           daily.supervisor_phone,\n           daily.estimated_return_to_work,\n           daily.osha_case_number,\n           nvl(monthly.indemnity_paid,'0.00') as indemnity_paid,\n           nvl(monthly.indemnity_incurred,'0.00') as indemnity_incurred,\n           nvl(monthly.payment_amount,'0.00') as payment_amount,\n           nvl(monthly.payment_amount5,'0.00') as payment_amount5,\n           nvl(monthly.payment_amount4,'0.00') as payment_amount4,\n           nvl(monthly.payment_amount1,'0.00') as payment_amount1,\n           nvl(monthly.reserve_amount5,'0.00') as reserve_amount5,\n           nvl(monthly.payment_amount2,'0.00') as payment_amount2,\n           nvl(monthly.payment_amount3,'0.00') as payment_amount3,\n           nvl(monthly.reserve_amount2,'0.00') as reserve_amount2,\n           nvl(monthly.reserve_amount3,'0.00') as reserve_amount3,\n           daily.death_date,\n           daily.death_result_of_injury_code,\n           daily.death_result_of_injury_desc,\n           daily.fiscal_year_incident_date,\n           daily.fiscal_year_add_date,\n           daily.pd_rating,\n           nvl(monthly.report_period_id,'') as report_period_id,\n           daily.fiat_lux_reported_date,\n           daily.shoes_for_crews,\n           daily.external_occupation_code,\n           daily.wage_continued,\n           daily.gender_code,\n           daily.gender_desc,\n           daily.denial_reason_code,\n           daily.denial_reason_desc,\n           daily.denial_reason,\n           daily.denied,\n           daily.claimant_address,\n           daily.claimant_city,\n           daily.claimant_state_code,\n           daily.claimant_zip_code,\n           daily.initial_physician,\n           daily.offsite_facility,\n           daily.init_phys_facility,\n           daily.init_phys_street,\n           daily.init_phys_city,\n           daily.init_phys_state_code,\n           daily.init_phys_zip_code,\n           daily.emergency_treatment,\n           daily.overnight_inpatient,\n           daily.time_began_work,\n           daily.time_of_event,\n           daily.employee_activity,\n           daily.equipment_used,\n           daily.incident_address1,\n           daily.incident_address2,\n           daily.incident_city,\n           daily.incident_state,\n           daily.incident_zip_code,\n           daily.incident_state_code,\n           daily.incident_county,\n           daily.claim_status_desc,\n           daily.injury_illness_dept,\n           daily.incident_type_group_code,\n           daily.incident_type_group_desc,\n           daily.claimant_type_desc,\n           daily.claimant_closed_date,\n           daily.wpv_event ,\n           daily.catastrophe_desc ,\n           daily.union_code ,\n           daily.union_desc ,\n           daily.employee_representation_code ,\n           daily.employee_representation_desc ,\n           case when monthly.claim_number is null then 1 else 0 end as d_new_claim_load_flag\n  from     sedwick_wc_daily daily left outer join sedwick_wc_monthly monthly on\n           daily.claim_number = monthly.claim_number"
+    }
+  }, {
+    "name" : "sedgwick_wc",
+    "type" : "table",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "mode" : "Overwrite",
+      "partitions" : "5",
+      "dependsOn" : [ "incoming_sedgwick_wc" ],
+      "ui" : {
+        "x" : 261,
+        "y" : 125
+      },
+      "batch" : true,
+      "format" : "parquet",
+      "distinct" : false,
+      "id" : "71af61a5-338e-4917-848f-6d17dab120f4",
+      "table" : "erm_incoming.sedgwick_wc"
+    }
+  }, {
+    "name" : "transform_wc_columns_to_diff_datatypes",
+    "type" : "transformcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "Get data from incoming sedgwick_wc table and transform it from string to diff data types",
+    "properties" : {
+      "dependsOn" : [ "incoming_sedgwick_wc" ],
+      "ui" : {
+        "x" : 231,
+        "y" : 246
+      },
+      "transforms" : [ {
+        "name" : "convert_to_timestamp",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "incident_date", " end_claimant_closed_date", " insured_coordinator_date", " insured_reported_date", " osha_lineout_date", " claimant_closed_date" ],
+          "transformType" : "cast(col AS targetType)",
+          "sql" : "cast($self AS timestamp)"
+        }
+      }, {
+        "name" : "trim_string",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "end_claimant_type_desc", " claim_cause_code", " claim_cause_desc ", "incident_type_code ", " claim_number ", "osha_code", " end_status_desc", " claimant_name ", "safety", " litigated", " subrogated", " supervisor_full_name", "  incident_location_desc", " incident_desc", " injury_desc", " body_part_code", " nature_of_injury_code", "  occupation_code", " occupation_desc  " ],
+          "transformType" : "trim(col)",
+          "sql" : "trim($self)"
+        }
+      }, {
+        "name" : "convert_to_decimal",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "reserve_amount", " reserve_amount1", " reserve_amount4", " hours_per_week", " indemnity_paid", " indemnity_incurred", " payment_amount", " payment_amount5", " payment_amount4", " payment_amount1", " reserve_amount5", " payment_amount2", " payment_amount3", " reserve_amount2", " reserve_amount3" ],
+          "transformType" : "cast(col AS targetType)",
+          "sql" : "cast($self AS Decimal(16,2))",
+          "dependsOn" : "transform_wc_columns_to_diff_datatypes"
+        }
+      }, {
+        "name" : "convert_to_int",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "age_at_injury" ],
+          "transformType" : "cast(col AS targetType)",
+          "sql" : "cast(trim($self) AS int)",
+          "dependsOn" : "transform_wc_columns_to_diff_datatypes"
+        }
+      } ],
+      "id" : "dbcaee38-c691-41d3-b55c-ccf813a512c7"
+    }
+  }, {
+    "name" : "processing_sedgwick_wc",
+    "type" : "table",
+    "nodeType" : "sink",
+    "description" : "reporting",
+    "properties" : {
+      "mode" : "Overwrite",
+      "partitions" : "5",
+      "dependsOn" : [ "transform_wc_columns_to_diff_datatypes" ],
+      "ui" : {
+        "x" : 383,
+        "y" : 126
+      },
+      "batch" : true,
+      "format" : "parquet",
+      "distinct" : false,
+      "id" : "9c359a00-4625-4af0-81ae-ff84c67f21ef",
+      "table" : "erm_processing.sedgwick_wc"
+    }
+  }, {
+    "name" : "drop_osha_loss_days",
+    "type" : "dropcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "Drop osha_loss_days",
+    "properties" : {
+      "dropColumns" : "osha_loss_days",
+      "dependsOn" : [ "transform_wc_columns_to_diff_datatypes" ],
+      "ui" : {
+        "x" : -12,
+        "y" : 397
+      },
+      "id" : "47913036-9e92-49fc-8147-5b608b0acca1"
+    }
+  }, {
+    "name" : "transform_columns_to_not_specified",
+    "type" : "transformcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "drop_osha_loss_days" ],
+      "ui" : {
+        "x" : 148,
+        "y" : 395
+      },
+      "transforms" : [ {
+        "name" : "convert_to_not_specified",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "insured_name1", " org1_code", " org2_code", " org3_code", " org1_desc", " org2_desc", " org3_desc", " org4_code", " org4_desc", " org5_code", " org5_desc", " org6_code", " org6_desc" ],
+          "transformType" : "case-when",
+          "sql" : "case when $self is null then 'Not Specified' when trim($self) = '' then 'Not Specified' else trim($self) end"
+        }
+      } ],
+      "id" : "62dd023a-00a7-4f43-b231-acc473e2401e"
+    }
+  }, {
+    "name" : "sedgwick_wc_location_rule",
+    "type" : "sql",
+    "nodeType" : "processor",
+    "description" : "Sedgwick WC - location lookup join",
+    "properties" : {
+      "dependsOn" : [ "loc_lkup", "transform_columns_to_not_specified" ],
+      "ui" : {
+        "x" : 292,
+        "y" : 389
+      },
+      "id" : "de905758-8b46-49d6-b83d-cbb9689658ff",
+      "sql" : "select *,\n       case when injury_report_consolidated_loc_short_name is null then 'Not Specified' when trim(injury_report_consolidated_loc_short_name) = ''  then 'Not Specified' else injury_report_consolidated_loc_short_name end  d_injury_report_consolidated_loc_short_name,\n       case when injury_report_consolidated_loc_long_name is null then 'Not Specified' when trim(injury_report_consolidated_loc_long_name) = ''  then 'Not Specified' else injury_report_consolidated_loc_long_name end  d_injury_report_consolidated_loc_long_name,\n       case when osha_report_loc_long_establishment_name is null  then 'Not Specified'  when trim(osha_report_loc_long_establishment_name) = ''  then 'Not Specified' else osha_report_loc_long_establishment_name end  d_osha_report_loc_long_establishment_name,\n       case when osha_report_loc_short_establishment_name is null then 'Not Specified' when trim(osha_report_loc_short_establishment_name) = ''  then 'Not Specified' else osha_report_loc_short_establishment_name end  d_osha_report_loc_short_establishment_name,\n       case when injury_report_loc_short_name is null then 'Not Specified' when trim(injury_report_loc_short_name) = ''  then 'Not Specified' else injury_report_loc_short_name end  d_injury_report_loc_short_name,\n       case when injury_report_loc_long_name is null then 'Not Specified'  when trim(injury_report_loc_long_name) = ''  then 'Not Specified'  else injury_report_loc_long_name end  d_injury_report_loc_long_name\nfrom   transform_columns_to_not_specified  wc\n        left  outer join \n\t\t    loc_lkup  loc\non  wc.insured_name1 = loc.loc_desc"
+    }
+  }, {
+    "name" : "drop_loc_lkup_columns",
+    "type" : "dropcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "Delete columns from location lookup",
+    "properties" : {
+      "dropColumns" : "loc_desc, loc_code, injury_report_consolidated_loc_short_name, injury_report_consolidated_loc_long_name,\nosha_report_loc_long_establishment_name, injury_report_loc_short_name, injury_report_loc_long_name, osha_report_loc_short_establishment_name",
+      "dependsOn" : [ "sedgwick_wc_location_rule" ],
+      "ui" : {
+        "x" : 382,
+        "y" : 260
+      },
+      "id" : "53fad5ce-1fbf-4a05-9183-a02dd49e5257"
+    }
+  }, {
+    "name" : "transform_columns_to_missing_data",
+    "type" : "transformcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "drop_loc_lkup_columns" ],
+      "ui" : {
+        "x" : 464,
+        "y" : 384
+      },
+      "transforms" : [ {
+        "name" : "convert_to_missing_data",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "claimant_address", " claimant_city", " claimant_state_code", " claimant_zip_code", " initial_physician", " offsite_facility", " init_phys_facility", " init_phys_street", " init_phys_city", " init_phys_state_code", " init_phys_zip_code", " emergency_treatment", " overnight_inpatient", " time_began_work", " employee_activity", " equipment_used", " incident_address1", " incident_address2", " incident_city", " incident_state", " incident_zip_code", " incident_state_code", " incident_county", " claim_status_desc", " injury_illness_dept", " incident_type_group_code", " incident_type_group_desc", " incident_type_desc", " body_part_desc", " nature_of_injury_desc", " time_of_event" ],
+          "transformType" : "case-when",
+          "sql" : "case when $self is null or  trim($self) = '' then '<Missing Data>' else trim($self) end"
+        }
+      } ],
+      "id" : "dc1bb8e8-26e3-43b0-9aa4-cf2d44a92509"
+    }
+  }, {
+    "name" : "sedgwick_wc_date_rule",
+    "type" : "addcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "transform_columns_to_missing_data" ],
+      "addColumns" : [ {
+        "name" : "d_date_calendar_year",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_calendar_year" ],
+          "transformType" : "year(col)",
+          "sql" : "year($self)"
+        }
+      }, {
+        "name" : "d_date_fiscal_year",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_fiscal_year" ],
+          "transformType" : "custom-expression",
+          "sql" : "case when (quarter($self) > 2) then year($self) + 1 else year($self) end "
+        }
+      }, {
+        "name" : "d_date_fiscal_year_quarter",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_fiscal_year_quarter" ],
+          "transformType" : "case-when",
+          "sql" : "case when (quarter($self) > 2) then quarter($self) - 2 else quarter($self) + 2 end"
+        }
+      }, {
+        "name" : "d_date_fiscal_year_month_num",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_fiscal_year_month_num" ],
+          "transformType" : "custom-expression",
+          "sql" : "case when (month($self) between 1 and 6) then month($self) + 6 else month($self) - 6 end"
+        }
+      }, {
+        "name" : "d_date_fiscal_year_range",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_fiscal_year_range" ],
+          "transformType" : "custom-expression",
+          "sql" : "concat(\"FY \" + substring(cast (case when (quarter($self) > 2) then year($self) + 1 else year($self) end  - 1 as string), 2, 4) + \"-\" + substring(cast (case when (quarter($self) > 2) then year($self) + 1 else year($self) end  as string), 3,2)) "
+        }
+      }, {
+        "name" : "d_date_fiscal_year_quarter_ind_tab",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_fiscal_year_quarter_ind_tab" ],
+          "transformType" : "custom-expression",
+          "sql" : "concat(cast(case when (quarter($self) > 2) then year($self) + 1 else year($self) end as string ) + \"-Q\" + cast (case when (quarter($self) > 2) then quarter($self) - 2 else quarter($self) + 2 end as string))"
+        }
+      }, {
+        "name" : "d_date_fiscal_year_quarter_ind_graph_view",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_fiscal_year_quarter_ind_graph_view" ],
+          "transformType" : "custom-expression",
+          "sql" : "concat( \"Q\" + cast(case when quarter($self) > 2 then quarter($self) - 2 else quarter($self) + 2 end  as string) + \"-\"  + substring(cast(case when (quarter($self) > 2) then year($self) + 1 else year($self) end  as string), 3, 2))"
+        }
+      }, {
+        "name" : "d_date_calendar_year_quarter_tab",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_calendar_year_quarter_tab" ],
+          "transformType" : "custom-expression",
+          "sql" : "concat( cast(year($self) as string) + \"-Q\" + cast(quarter($self) as string) )"
+        }
+      }, {
+        "name" : "d_date_calendar_year_quarter_graph",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_calendar_year_quarter_graph" ],
+          "transformType" : "custom-expression",
+          "sql" : "concat(\"Q\" + cast(quarter($self) as string) + \"-\" + substring(cast( year($self) as string), 3, 2)) "
+        }
+      }, {
+        "name" : "d_date_calendar_year_quarter",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_calendar_year_quarter" ],
+          "transformType" : "custom-expression",
+          "sql" : "quarter($self)"
+        }
+      }, {
+        "name" : "d_date_month_name",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_month_name" ],
+          "transformType" : "custom-expression",
+          "sql" : "date_format($self, 'MMMM')"
+        }
+      }, {
+        "name" : "d_date_month_name_short",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_month_name_short" ],
+          "transformType" : "custom-expression",
+          "sql" : "substring(date_format($self, 'MMMM') ,3,2)"
+        }
+      }, {
+        "name" : "d_date_calendar_year_month_num",
+        "properties" : {
+          "inputColumns" : [ "incident_date", "claim_add_date" ],
+          "columns" : [ "d_$self_calendar_year_month_num" ],
+          "transformType" : "month(col)",
+          "sql" : "month($self)"
+        }
+      } ],
+      "ui" : {
+        "x" : 554,
+        "y" : 260
+      },
+      "id" : "ed031c2b-bdd8-4971-a52f-cda6c4786e6f"
+    }
+  }, {
+    "name" : "transform_columns_to_tinyint",
+    "type" : "transformcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "sedgwick_wc_date_rule" ],
+      "ui" : {
+        "x" : 624,
+        "y" : 384
+      },
+      "transforms" : [ {
+        "name" : "convert_to_tinyint",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "d_incident_date_fiscal_year_quarter", " d_incident_date_calendar_year_quarter", " d_incident_date_fiscal_year_month_num", " d_incident_date_calendar_year_month_num", " d_incident_date_calendar_year", " d_incident_date_fiscal_year" ],
+          "transformType" : "cast(col AS targetType)",
+          "sql" : "cast($self AS tinyint)"
+        }
+      } ],
+      "id" : "48ede475-ad07-4fdc-a1bc-b9406a508c41"
+    }
+  }, {
+    "name" : "sedgwick_wc_generic_rule",
+    "type" : "addcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "transform_columns_to_tinyint" ],
+      "addColumns" : [ {
+        "name" : "d_cap_osha_lost_days",
+        "properties" : {
+          "columns" : [ "d_cap_osha_lost_days" ],
+          "transformType" : "custom-expression",
+          "sql" : "cast(case when td_lost_days >= 180 then 180 else td_lost_days end as int)"
+        }
+      }, {
+        "name" : "d_cap_osha_restricted_days",
+        "properties" : {
+          "columns" : [ "d_cap_osha_restricted_days" ],
+          "transformType" : "custom-expression",
+          "sql" : "cast(case when td_lost_days >= 180 then 0 when td_lost_days < 180 and td_lost_days + osha_restricted_days <= 180 then osha_restricted_days when td_lost_days < 180 and td_lost_days + osha_restricted_days > 180 then (180 - td_lost_days) else 0 end as int)\n"
+        }
+      }, {
+        "name" : "d_injury_claim_wc_manager_status",
+        "properties" : {
+          "columns" : [ "d_injury_claim_wc_manager_status" ],
+          "transformType" : "case-when",
+          "sql" : "case when claimant_type_desc = 'Pending' then 'Pending' when  claimant_type_desc <> 'Pending' and (denied_date > accepted_date or (denied_date is not null and accepted_date is null)) and denial_reason_code not in ('35', '37', '40')  then 'Denied' when claimant_type_desc not in ('Pending', 'Record Only', 'First Aid Unpaid', 'First Aid Paid') and denied_date is null and accepted_date is null then 'Unable to Determine' else 'Accepted' end\n"
+        }
+      } ],
+      "ui" : {
+        "x" : 719,
+        "y" : 257
+      },
+      "id" : "a51ab666-4f23-49e8-98c6-4a10cd522c19"
+    }
+  }, {
+    "name" : "add_d_accepted_injury_case_flag",
+    "type" : "addcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "addColumns" : [ {
+        "name" : "d_accepted_injury_case_flag",
+        "properties" : {
+          "columns" : [ "d_accepted_injury_case_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_injury_claim_wc_manager_status in ('Denied', 'Pending') then 0 else 1 end\n"
+        }
+      } ],
+      "dependsOn" : [ "sedgwick_wc_generic_rule" ],
+      "ui" : {
+        "x" : 796,
+        "y" : 380
+      },
+      "id" : "0813bd02-3e72-404a-8f9c-775e933ee492"
+    }
+  }, {
+    "name" : "add_d_injury_class_desc_1",
+    "type" : "addcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "addColumns" : [ {
+        "name" : "d_injury_class_desc_1",
+        "properties" : {
+          "columns" : [ "d_injury_class_desc" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_accepted_injury_case_flag = 0 then 'NA' when (d_accepted_injury_case_flag = 1 and claimant_type_desc = 'Record Only') then 'Info Only Cases' when  d_accepted_injury_case_flag = 1 and claimant_type_desc <>  'Record Only' and (claimant_type_desc IN ('First Aid Paid', 'First Aid Unpaid') AND (td_lost_days = 0 AND osha_restricted_days = 0) AND (claimant_type_desc NOT IN ('First Aid Unpaid','First Aid Paid') OR incident_type_code not in ('203', '213') OR claim_cause_code not in ('200', '201', '202', '203', '204') )) then 'Non Recordable Cases'  when d_accepted_injury_case_flag = 1 and claimant_type_desc <> 'Record Only' and ((claim_cause_code in ('200', '201', '202', '203', '204') and incident_type_code in ('203','213')) OR claimant_type_desc NOT IN ('First Aid Paid', 'First Aid Unpaid') OR (claimant_type_desc IN ('First Aid Paid', 'First Aid Unpaid') AND (osha_restricted_days > 0 or td_lost_days != 0))) and td_lost_days != 0 then 'Severe Cases with Days Away'  when d_accepted_injury_case_flag = 1 and claimant_type_desc <>  'Record Only' and ( (claim_cause_code in ('200', '201', '202', '203', '204') and incident_type_code in ('203', '213')) OR claimant_type_desc NOT IN ('First Aid Paid', 'First Aid Unpaid') OR (claimant_type_desc IN ('First Aid Paid', 'First Aid Unpaid') AND (osha_restricted_days > 0 or td_lost_days != 0)) ) and osha_restricted_days > 0 and td_lost_days = 0 then 'Severe Cases with Transfer or Restriction'  when d_accepted_injury_case_flag = 1 and claimant_type_desc <>  'Record Only' and ((claim_cause_code in ('200', '201', '202', '203', '204') and incident_type_code in ('203', '213')) OR claimant_type_desc NOT IN ('First Aid Paid', 'First Aid Unpaid') OR (claimant_type_desc IN ('First Aid Paid', 'First Aid Unpaid') AND (osha_restricted_days > 0 OR td_lost_days != 0))) AND (td_lost_days = 0 AND osha_restricted_days = 0) then 'Not Severe Cases' end\n"
+        }
+      } ],
+      "dependsOn" : [ "add_d_accepted_injury_case_flag" ],
+      "ui" : {
+        "x" : 881,
+        "y" : 255
+      },
+      "id" : "263241a6-322e-4865-ab20-b012d4353f2f"
+    }
+  }, {
+    "name" : "update_d_injury_class_desc",
+    "type" : "transformcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "add_d_injury_class_desc_1" ],
+      "ui" : {
+        "x" : 963,
+        "y" : 383
+      },
+      "transforms" : [ {
+        "name" : "update_derived_column",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "d_injury_class_desc" ],
+          "transformType" : "case-when",
+          "sql" : "case when  d_accepted_injury_case_flag = 1 and d_injury_class_desc not in ('Info Only Cases' , 'Non Recordable Cases') and death_date is not null and death_result_of_injury_code = '1' then 'Fatality Cases' else trim(d_injury_class_desc) end\n"
+        }
+      } ],
+      "id" : "411e9d9e-763b-48f7-8798-1e67e62971a3"
+    }
+  }, {
+    "name" : "transform_derived_columns",
+    "type" : "addcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "update_d_injury_class_desc" ],
+      "addColumns" : [ {
+        "name" : "d_total_cap180_days",
+        "properties" : {
+          "columns" : [ "d_total_cap180_days" ],
+          "transformType" : "custom-expression",
+          "sql" : "d_cap_osha_lost_days + d_cap_osha_restricted_days"
+        }
+      }, {
+        "name" : "d_total_days",
+        "properties" : {
+          "columns" : [ "d_total_days" ],
+          "transformType" : "custom-expression",
+          "sql" : "td_lost_days + osha_restricted_days"
+        }
+      }, {
+        "name" : "d_dept_desc",
+        "properties" : {
+          "columns" : [ "d_dept_desc" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_injury_report_consolidated_loc_short_name = 'UCB' then org3_desc when d_injury_report_consolidated_loc_short_name = 'UCSF MC' then org2_desc when d_injury_report_consolidated_loc_short_name = 'UCD MC' then org3_desc when d_injury_report_consolidated_loc_short_name = 'UCLA MC' then org2_desc when d_injury_report_consolidated_loc_short_name = 'UCSD MC' then org3_desc when d_injury_report_consolidated_loc_short_name = 'UCI MC' then org2_desc when d_injury_report_consolidated_loc_short_name = 'UCSF' then org3_desc when d_injury_report_consolidated_loc_short_name = 'UCD' then org2_desc when d_injury_report_consolidated_loc_short_name = 'UCLA' then org3_desc when d_injury_report_consolidated_loc_short_name = 'UCR' then org3_desc when d_injury_report_consolidated_loc_short_name = 'UCSD' then org2_desc when d_injury_report_consolidated_loc_short_name = 'UCSC' then org4_desc when d_injury_report_consolidated_loc_short_name = 'UCSB' then org2_desc when d_injury_report_consolidated_loc_short_name = 'UCI' then org3_desc when d_injury_report_consolidated_loc_short_name = 'UCM' then org3_desc when d_injury_report_consolidated_loc_short_name = 'UCOP' then org1_desc when d_injury_report_consolidated_loc_short_name = 'UC ANR' then org2_desc when d_injury_report_consolidated_loc_short_name = 'UC LBNL' then org1_desc when d_injury_report_consolidated_loc_short_name = 'Not Specified' then 'Not Specified' end\n"
+        }
+      }, {
+        "name" : "d_sharp_injury_case_flag",
+        "properties" : {
+          "columns" : [ "d_sharp_injury_case_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when incident_type_code in ('203', '213') AND claim_cause_code in ('200', '201', '202', '203', '204') then 1 else 0 end\n"
+        }
+      } ],
+      "ui" : {
+        "x" : 1043,
+        "y" : 254
+      },
+      "id" : "a18b143f-dda3-4d96-adcb-f036bbf79a73"
+    }
+  }, {
+    "name" : "nature_of_injury_lkup",
+    "type" : "table",
+    "nodeType" : "source",
+    "description" : "Claims Injury Lookup Table",
+    "properties" : {
+      "designSchema" : 76,
+      "dependsOn" : [ ],
+      "ui" : {
+        "x" : 1054,
+        "y" : 515
+      },
+      "format" : "table",
+      "distinct" : false,
+      "id" : "603c6545-369c-422f-88f7-9091675770ad",
+      "table" : "erm_reporting.nature_of_injury_lkup"
+    }
+  }, {
+    "name" : "sedgwick_wc_osha_rule",
+    "type" : "sql",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "transform_derived_columns", "nature_of_injury_lkup" ],
+      "ui" : {
+        "x" : 1137,
+        "y" : 386
+      },
+      "id" : "29a13e7d-7700-498e-9b0c-13bf3bf22c6d",
+      "sql" : "select *,\n       case when osha_300_injury_and_illness_type is null  then 'Not Specified'  when trim(osha_300_injury_and_illness_type) = ''  then 'Not Specified' else osha_300_injury_and_illness_type end  d_osha_300_injury_and_illness_type\nfrom   transform_derived_columns  wc\nleft  outer join \n\t\t   nature_of_injury_lkup  injury\non       wc.nature_of_injury_code == injury.injury_code"
+    }
+  }, {
+    "name" : "drop_nature_of_injury_columns",
+    "type" : "dropcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "Delete columns from Injury lookup",
+    "properties" : {
+      "dropColumns" : "injury_code, osha_300_injury_and_illness_type",
+      "dependsOn" : [ "sedgwick_wc_osha_rule" ],
+      "ui" : {
+        "x" : 1222,
+        "y" : 261
+      },
+      "id" : "1fad8929-8bbd-49ec-9ca8-020271a3dd62"
+    }
+  }, {
+    "name" : "add_d_private_case_flag",
+    "type" : "addcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "addColumns" : [ {
+        "name" : "d_private_case_flag",
+        "properties" : {
+          "columns" : [ "d_private_case_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when (body_part_group_code = '4' and body_part_code = '418') or (lower(incident_desc) rlike '\\\\\\\\b(grope|groping|groped|rape|raped|sexual abuse|sexual assault|sexual harassment)\\\\\\\\b') or (lower(injury_desc) rlike '\\\\\\\\b(grope|groping|groped|rape|raped|sexual abuse|sexual assault|sexual harassment)\\\\\\\\b') or (nature_of_injury_code in ('504', '502', '222', '224', '220', '214', '202', '238')) or (d_sharp_injury_case_flag = 1) or (osha_privacy_indicator = '1') then 1 else 0 end\n"
+        }
+      } ],
+      "dependsOn" : [ "drop_nature_of_injury_columns" ],
+      "ui" : {
+        "x" : 1286,
+        "y" : 395
+      },
+      "id" : "9746fb64-2c12-416c-8f79-a44ea1ad1f2b"
+    }
+  }, {
+    "name" : "sedgwick_wc_generic_rule_2",
+    "type" : "addcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "add_d_private_case_flag" ],
+      "addColumns" : [ {
+        "name" : "d_osha_300_injury_and_illness_type_desc",
+        "properties" : {
+          "columns" : [ "d_osha_300_injury_and_illness_type_desc" ],
+          "transformType" : "custom-expression",
+          "sql" : "concat(nvl(nature_of_injury_desc, ''), ' on ', nvl(body_part_desc, ''), ' from ', nvl(incident_type_group_desc, ''), ', ', nvl(incident_type_desc, ''))\n"
+        }
+      }, {
+        "name" : "d_private_claimant_name",
+        "properties" : {
+          "columns" : [ "d_private_claimant_name" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_private_case_flag = 1 then 'privacy concern cases' else trim(claimant_name) end"
+        }
+      }, {
+        "name" : "d_time_of_event_undetermined_flag",
+        "properties" : {
+          "columns" : [ "d_time_of_event_undetermined_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when time_of_event is NULL  or trim(time_of_event) = '' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_recordable_case_flag",
+        "properties" : {
+          "columns" : [ "d_recordable_case_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_accepted_injury_case_flag = 1 and d_injury_class_desc not in ('Info Only Cases','Non Recordable Cases','Unclassified Cases') then 1 else 0 end\n"
+        }
+      }, {
+        "name" : "d_incident_date_calendar_year_month_day",
+        "properties" : {
+          "columns" : [ "d_incident_date_calendar_year_month_day" ],
+          "transformType" : "case-when",
+          "sql" : "case when incident_date is null then null  else concat(SUBSTR(cast(to_date(incident_date) as string),6,2), '/', SUBSTR(cast(to_date(incident_date) as string),9,2)) end\n"
+        }
+      }, {
+        "name" : "d_severe_cases_with_days_aways_flag",
+        "properties" : {
+          "columns" : [ "d_severe_cases_with_days_aways_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_injury_class_desc = 'Severe Cases with Days Away' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_severe_cases_with_transfer_or_restriction_flag",
+        "properties" : {
+          "columns" : [ "d_severe_cases_with_transfer_or_restriction_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_injury_class_desc = 'Severe Cases with Transfer or Restriction' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_not_severe_cases_flag",
+        "properties" : {
+          "columns" : [ "d_not_severe_cases_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_injury_class_desc = 'Not Severe Cases' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_non_recordable_case_flag",
+        "properties" : {
+          "columns" : [ "d_non_recordable_case_flag" ],
+          "transformType" : "custom-expression",
+          "sql" : "case when d_injury_class_desc = 'Non Recordable Cases' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_info_only_cases_flag",
+        "properties" : {
+          "columns" : [ "d_info_only_cases_flag" ],
+          "transformType" : "custom-expression",
+          "sql" : "case when d_injury_class_desc = 'Info Only Cases' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_fatality_cases_flag",
+        "properties" : {
+          "columns" : [ "d_fatality_cases_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_injury_class_desc = 'Fatality Cases' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_osha_300_skin_disorder_flag",
+        "properties" : {
+          "columns" : [ "d_osha_300_skin_disorder_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_osha_300_injury_and_illness_type = 'Skin Disorder' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_osha_300_all_other_illnesses_flag",
+        "properties" : {
+          "columns" : [ "d_osha_300_all_other_illnesses_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_osha_300_injury_and_illness_type = 'All other illnesses' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_osha_300_hearing_loss_flag",
+        "properties" : {
+          "columns" : [ "d_osha_300_hearing_loss_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_osha_300_injury_and_illness_type = 'Hearing Loss' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_osha_300_respiratory_condition_flag",
+        "properties" : {
+          "columns" : [ "d_osha_300_respiratory_condition_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_osha_300_injury_and_illness_type = 'Respiratory Condition' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_osha_300_fatality_flag",
+        "properties" : {
+          "columns" : [ "d_osha_300_fatality_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_osha_300_injury_and_illness_type = 'Fatality' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_osha_300_injury_flag",
+        "properties" : {
+          "columns" : [ "d_osha_300_injury_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_osha_300_injury_and_illness_type = 'Injury' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_osha_300_poisoning_flag",
+        "properties" : {
+          "columns" : [ "d_osha_300_poisoning_flag" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_osha_300_injury_and_illness_type = 'Poisoning' then 1 else 0 end"
+        }
+      }, {
+        "name" : "d_dept_code",
+        "properties" : {
+          "columns" : [ "d_dept_code" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_injury_report_consolidated_loc_short_name = 'UCB' then org3_code when d_injury_report_consolidated_loc_short_name = 'UCSF MC' then org2_code when d_injury_report_consolidated_loc_short_name = 'UCD MC' then org3_code when d_injury_report_consolidated_loc_short_name = 'UCLA MC' then org2_code when d_injury_report_consolidated_loc_short_name = 'UCSD MC' then org3_code when d_injury_report_consolidated_loc_short_name = 'UCI MC' then org2_code when d_injury_report_consolidated_loc_short_name = 'UCSF' then org3_code when d_injury_report_consolidated_loc_short_name = 'UCD' then org2_code when d_injury_report_consolidated_loc_short_name = 'UCLA' then org3_code when d_injury_report_consolidated_loc_short_name = 'UCR' then org3_code when d_injury_report_consolidated_loc_short_name = 'UCSD' then org2_code when d_injury_report_consolidated_loc_short_name = 'UCSC' then org4_code when d_injury_report_consolidated_loc_short_name = 'UCSB' then org2_code when d_injury_report_consolidated_loc_short_name = 'UCI' then org3_code when d_injury_report_consolidated_loc_short_name = 'UCM' then org3_code when d_injury_report_consolidated_loc_short_name = 'UCOP' then org1_code when d_injury_report_consolidated_loc_short_name = 'UC ANR' then org2_code when d_injury_report_consolidated_loc_short_name = 'UC LBNL' then org1_code when d_injury_report_consolidated_loc_short_name = 'Not Specified' then 'Not Specified' end\n"
+        }
+      } ],
+      "ui" : {
+        "x" : 1381,
+        "y" : 269
+      },
+      "id" : "86eed5a0-46fb-4557-a56d-f2d2235a7167"
+    }
+  }, {
+    "name" : "transform_d_total_cap180_days",
+    "type" : "transformcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "sedgwick_wc_generic_rule_2" ],
+      "ui" : {
+        "x" : 1475,
+        "y" : 394
+      },
+      "transforms" : [ {
+        "name" : "d_total_cap180_days",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "d_total_cap180_days" ],
+          "transformType" : "case-when",
+          "sql" : "case when d_injury_class_desc = 'Info Only Cases' then 0 else d_total_cap180_days end"
+        }
+      } ],
+      "id" : "0fc7cd24-44e1-4afc-9cdb-5c03ba0932d1"
+    }
+  } ]
+}
