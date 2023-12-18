@@ -1,0 +1,96 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "To test the bug in the ticket DATAMORPH1381",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "csv_2",
+    "type" : "filecsv",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "ignoreTrailingWhiteSpace" : false,
+      "enforceSchema" : true,
+      "escapeQuotes" : true,
+      "multiLine" : false,
+      "batch" : true,
+      "format" : "csv",
+      "inferSchema" : false,
+      "samplingRatio" : 1,
+      "maxColumns" : 20480,
+      "path" : "s3://datamorph-dev/datasets/customer_loan/customer-loan.csv",
+      "ignoreLeadingWhiteSpace" : false,
+      "ui" : {
+        "x" : 25,
+        "y" : 200
+      },
+      "header" : true,
+      "maxCharsPerColumn" : -1,
+      "id" : "e61c18c3-2b47-41b3-b8df-1448f9fc0631",
+      "quoteAll" : false,
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "csv_1",
+    "type" : "filecsv",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "ignoreTrailingWhiteSpace" : false,
+      "enforceSchema" : true,
+      "escapeQuotes" : true,
+      "multiLine" : false,
+      "batch" : true,
+      "format" : "csv",
+      "inferSchema" : false,
+      "samplingRatio" : 1,
+      "maxColumns" : 20480,
+      "path" : "s3://datamorph-dev/datasets/customer_loan/customer-loan.csv",
+      "ignoreLeadingWhiteSpace" : false,
+      "ui" : {
+        "x" : 25,
+        "y" : 75
+      },
+      "header" : true,
+      "maxCharsPerColumn" : -1,
+      "id" : "3351a082-adf4-4ed5-9a48-15756349532d",
+      "quoteAll" : false,
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "join_1",
+    "type" : "join",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "joinOnKeys" : "csv_1.customerId = csv_2.customerId",
+      "dependsOn" : [ "csv_1", "csv_2" ],
+      "ui" : {
+        "x" : 197,
+        "y" : 149
+      },
+      "joinType" : "INNER JOIN",
+      "distinct" : false,
+      "id" : "a91b1a1b-be42-44d0-bb84-2aa74284111f"
+    }
+  }, {
+    "name" : "parquet_1",
+    "type" : "fileparquet",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "mode" : "Overwrite",
+      "path" : "s3://datamorph-dev/output/DATAMORPH1381/",
+      "dependsOn" : [ "join_1" ],
+      "ui" : {
+        "x" : 373,
+        "y" : 150
+      },
+      "batch" : true,
+      "format" : "parquet",
+      "id" : "cf86dad2-e714-49a0-bc29-8b4e038af6ea"
+    }
+  } ]
+}
