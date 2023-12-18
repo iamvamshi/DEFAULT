@@ -1,0 +1,72 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "csv_1",
+    "type" : "filecsv",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "ignoreTrailingWhiteSpace" : false,
+      "enforceSchema" : true,
+      "multiLine" : false,
+      "batch" : true,
+      "format" : "csv",
+      "inferSchema" : false,
+      "samplingRatio" : 1,
+      "maxColumns" : 20480,
+      "path" : "s3://datamorph-dev/datasets/customer_loan/loan/customer-loan.csv",
+      "ignoreLeadingWhiteSpace" : false,
+      "ui" : {
+        "x" : 25,
+        "y" : 25
+      },
+      "header" : true,
+      "maxCharsPerColumn" : -1,
+      "id" : "752c3802-82be-4959-ae9f-8a516eac549e",
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "schema_1",
+    "type" : "schemaprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "outputTo" : "schemaDiff",
+      "dependsOn" : [ "csv_1" ],
+      "ui" : {
+        "x" : 175,
+        "y" : 25
+      },
+      "dataFormat" : "csv",
+      "schemaLocation" : "s3://datamorph-dev/output/schemaTest2/schema",
+      "batch" : true,
+      "id" : "d5d706ec-244e-4975-94c1-ccaa8b74e5ba",
+      "inferSchema" : true,
+      "compatibility" : "MERGE_ALL_COLUMNS"
+    }
+  }, {
+    "name" : "delta_1",
+    "type" : "delta",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "mode" : "Overwrite",
+      "path" : "s3://datamorph-dev/output/schemaTest",
+      "dependsOn" : [ "schema_1" ],
+      "ui" : {
+        "x" : 325,
+        "y" : 25
+      },
+      "batch" : true,
+      "format" : "delta",
+      "overwriteSchema" : true,
+      "id" : "92d61926-db81-4468-9926-764938d3c95b",
+      "mergeSchema" : false
+    }
+  } ]
+}
