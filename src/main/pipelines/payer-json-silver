@@ -1,0 +1,89 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "delta_1",
+    "type" : "delta",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "spark.databricks.delta.formatCheck.enabled" : false,
+      "path" : "s3://datamorph-dev/workspace-sowmya/dataset/studioai/output1/bronze",
+      "spark.sql.files.ignoreMissingFiles" : false,
+      "select" : "*",
+      "designSchema" : 281,
+      "ui" : {
+        "x" : 25,
+        "y" : 25
+      },
+      "spark.sql.files.ignoreCorruptFiles" : false,
+      "batch" : true,
+      "format" : "delta",
+      "distinct" : false,
+      "id" : "f5ae5ff0-c878-4a96-bba3-e0d0e8bb43ba",
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "flatten",
+    "type" : "sql",
+    "nodeType" : "processor",
+    "description" : "billing_code_type   billing_code   negotiated_rates.negotiated_prices.service_code  negotiated_rates.negotiated_prices.negotiated_rate   provider_groups.npi   provider_group_id",
+    "properties" : {
+      "cache" : "MEMORY_AND_DISK_SER",
+      "dependsOn" : [ "delta_1" ],
+      "ui" : {
+        "x" : 227,
+        "y" : 27
+      },
+      "id" : "28e59b11-1815-4c0a-bc16-e8a9a3afdefd",
+      "sql" : "SELECT\n    billing_code,\n    billing_code_type,\n    provider_group_id,\n    negotiated_rate,\n    service_code,\n    npi\nFROM\n    (\n        SELECT\n            billing_code,\n            billing_code_type,\n            provider_group_id,\n            negotiated_prices_flat.negotiated_rate,\n            negotiated_prices_flat.service_code AS service_code_flat,\n            npi\n        FROM\n            (\n                SELECT\n                    billing_code,\n                    billing_code_type,\n                    provider_group_id,\n                    negotiated_rates_flat.negotiated_prices,\n                    provider_groups_flat.npi AS npi_flat\n                FROM\n                    delta_1\n                    LATERAL VIEW OUTER EXPLODE(negotiated_rates) AS negotiated_rates_flat\n                    LATERAL VIEW OUTER EXPLODE(provider_groups) AS provider_groups_flat\n            )\n            LATERAL VIEW OUTER EXPLODE(negotiated_prices) AS negotiated_prices_flat\n            LATERAL VIEW OUTER EXPLODE(npi_flat) AS npi\n    )\n    LATERAL VIEW OUTER EXPLODE(service_code_flat) AS service_code"
+    }
+  }, {
+    "name" : "delta_2",
+    "type" : "delta",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "mode" : "Append",
+      "path" : "s3://datamorph-dev/workspace-sowmya/dataset/studioai/output1/silver",
+      "select" : "*",
+      "dependsOn" : [ "flatten" ],
+      "ui" : {
+        "x" : 475,
+        "y" : 25
+      },
+      "batch" : true,
+      "format" : "delta",
+      "overwriteSchema" : false,
+      "id" : "886bb8ca-a28c-4ce2-a54b-e9c827c1d381",
+      "mergeSchema" : true
+    }
+  }, {
+    "name" : "csv_1",
+    "type" : "filecsv",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "ignoreTrailingWhiteSpace" : true,
+      "select" : "*",
+      "dependsOn" : [ "flatten" ],
+      "escapeQuotes" : true,
+      "batch" : true,
+      "format" : "csv",
+      "mode" : "Append",
+      "path" : "s3://datamorph-dev/workspace-sowmya/dataset/studioai/output1/silver_csv",
+      "ignoreLeadingWhiteSpace" : true,
+      "ui" : {
+        "x" : 476,
+        "y" : 145
+      },
+      "header" : false,
+      "id" : "0ac25cf6-619c-484b-a79b-eb11fb8d5856",
+      "quoteAll" : false
+    }
+  } ]
+}
