@@ -6,6 +6,303 @@
     "tags" : [ ]
   },
   "workflow" : [ {
+    "name" : "apply_uc_1",
+    "type" : "delta",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ ],
+      "icon" : "https://dev-api.datamorph.ai/iconslight/deltalake.svg",
+      "batch" : true,
+      "format" : "delta",
+      "extras" : "Delta",
+      "label" : "apply_uc_1",
+      "path" : "${APPLY_UC_TABLE_PATH}",
+      "ui" : {
+        "x" : 15,
+        "y" : 510
+      },
+      "width" : 114,
+      "style" : {
+        "backgroundColor" : "#754EFB"
+      },
+      "position" : {
+        "x" : 28.263941940412508,
+        "y" : 550.5115226337448
+      },
+      "id" : "dndnode_0.6305795869318223",
+      "height" : 65
+    }
+  }, {
+    "name" : "admissions_base_sql_1",
+    "type" : "sql",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "apply_uc_1" ],
+      "ui" : {
+        "x" : 150,
+        "y" : 555
+      },
+      "width" : 114,
+      "icon" : "https://dev-api.datamorph.ai/iconslight/transformation-sql.svg",
+      "extras" : "SQL",
+      "style" : {
+        "backgroundColor" : "#F0A33D"
+      },
+      "position" : {
+        "x" : 188.2639419404125,
+        "y" : 589.5115226337448
+      },
+      "label" : "admissions_base_sql_1",
+      "id" : "dndnode_0.8702050902494232",
+      "height" : 65,
+      "sql" : "SELECT\n    fileyear,\n    filemonth,\n    termcode,\n    aa.*\nFROM\n    apply_uc\n    LATERAL VIEW OUTER EXPLODE(UndergraduateAdmissionsRecord) AS ug\n    LATERAL VIEW OUTER EXPLODE(ug.AdmissionsApplication) AS aa"
+    }
+  }, {
+    "name" : "drop_trans_appl_applicationid_data_1",
+    "type" : "dropcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "maxLinkAllowed" : 1,
+      "dropColumns" : "admissions_base_sql_1.TransmissionData,\nadmissions_base_sql_1.Applicant.ApplicationId",
+      "dependsOn" : [ "admissions_base_sql_1" ],
+      "icon" : "https://dev-api.datamorph.ai/iconslight/transformation-dropcolumns.svg",
+      "extras" : "Drop Columns",
+      "label" : "drop_trans_appl_applicationid_data_1",
+      "dropColumnIfAllNull" : false,
+      "ui" : {
+        "x" : 285,
+        "y" : 615
+      },
+      "width" : 114,
+      "style" : {
+        "backgroundColor" : "#F0A33D"
+      },
+      "position" : {
+        "x" : 322.2639419404125,
+        "y" : 591.5115226337448
+      },
+      "id" : "dndnode_0.09518902374493621",
+      "height" : 65
+    }
+  }, {
+    "name" : "applicant_base_1",
+    "type" : "sql",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "drop_trans_appl_applicationid_data_1" ],
+      "ui" : {
+        "x" : 420,
+        "y" : 615
+      },
+      "width" : 114,
+      "icon" : "https://dev-api.datamorph.ai/iconslight/transformation-sql.svg",
+      "extras" : "SQL",
+      "style" : {
+        "backgroundColor" : "#F0A33D"
+      },
+      "position" : {
+        "x" : 468.2639419404125,
+        "y" : 589.5115226337448
+      },
+      "label" : "applicant_base_1",
+      "id" : "dndnode_0.7879581522071202",
+      "height" : 65,
+      "sql" : "SELECT\n    *\nFROM\n    drop_trans_appl_applicationid_data\n    LATERAL VIEW OUTER EXPLODE(Applicant.Application) AS Application\n    LATERAL VIEW OUTER EXPLODE(Application.ApplicationQuestion) AS ApplicationQuestion\n    LATERAL VIEW OUTER EXPLODE(Application.StudentReleaseCode) AS StudentReleaseCode\n    LATERAL VIEW OUTER EXPLODE(Application.EducationHistory) AS EducationHistory\n    LATERAL VIEW OUTER EXPLODE(Application.RestrictedScholarshipCode) AS RestrictedScholarshipCode\n    LATERAL VIEW OUTER EXPLODE(Application.ApplicationDetail) AS ApplicationDetail\n    LATERAL VIEW OUTER EXPLODE(ApplicationDetail.CampusAppliedDetail) AS CampusAppliedDetail\n    LATERAL VIEW OUTER EXPLODE(CampusAppliedDetail.UCSDCampusPreference) AS UCSDCampusPreference\n    LATERAL VIEW OUTER EXPLODE(CampusAppliedDetail.ApplicationDegreeProgram) AS ApplicationDegreeProgram\n    LATERAL VIEW OUTER EXPLODE(Application.AdditionalStudentAchievements.OtherStudentAchievement) AS OtherStudentAchievement\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.AlternateName) AS AlternateName\n    LATERAL VIEW OUTER EXPLODE(Applicant.SelfReportedTests) AS SelfReportedTests\n    LATERAL VIEW OUTER EXPLODE(SelfReportedTests.EducationSubtest) AS EducationSubtest\n    LATERAL VIEW OUTER EXPLODE(Applicant.ExtraCurricularActivity) AS ExtraCurricularActivity\n    LATERAL VIEW OUTER EXPLODE(Applicant.Residency) AS Residency\n    LATERAL VIEW OUTER EXPLODE(Residency.Citizenship) AS ResidencyCitizenship\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.Citizenship) AS Citizenship\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.SingleParentInfo) AS SingleParentInfo\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.Income) AS Income\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.DependentsInfo) AS DependentsInfo\n    LATERAL VIEW OUTER EXPLODE(Applicant.Family.SingleParentInfo) AS FamilySingleParentInfo\n    LATERAL VIEW OUTER EXPLODE(Applicant.Family.FamilyIncome) AS FamilyIncome\n    LATERAL VIEW OUTER EXPLODE(Applicant.Family.FamilyDependents) AS FamilyDependents\n    LATERAL VIEW OUTER EXPLODE(Applicant.Family.FamilyMember) AS FamilyMember\n    LATERAL VIEW OUTER EXPLODE(FamilyMember.OccupationDetail) AS OccupationDetail\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.EthnicityRace.RaceCode) AS RaceCode\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.EthnicityRace.LocalEthnicityRaceCode) AS LocalEthnicityRaceCode\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.Employment) AS Employment\n    LATERAL VIEW OUTER EXPLODE(Employment.GradeLevelWeeklyHours) AS GradeLevelWeeklyHours"
+    }
+  }, {
+    "name" : "applicant_1",
+    "type" : "dropcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "maxLinkAllowed" : 1,
+      "dropColumns" : [ "Application.Application", "Application.ApplicationId" ],
+      "dependsOn" : [ "applicant_base_1" ],
+      "ui" : {
+        "x" : 555,
+        "y" : 630
+      },
+      "width" : 114,
+      "icon" : "https://dev-api.datamorph.ai/iconslight/transformation-dropcolumns.svg",
+      "extras" : "Drop Columns",
+      "style" : {
+        "backgroundColor" : "#F0A33D"
+      },
+      "position" : {
+        "x" : 607.2639419404125,
+        "y" : 590.5115226337448
+      },
+      "label" : "applicant_1",
+      "id" : "dndnode_0.5797597493558768",
+      "height" : 65
+    }
+  }, {
+    "name" : "admissions_app_sql_1",
+    "type" : "sql",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "applicant_1" ],
+      "ui" : {
+        "x" : 690,
+        "y" : 630
+      },
+      "width" : 114,
+      "icon" : "https://dev-api.datamorph.ai/iconslight/transformation-sql.svg",
+      "extras" : "SQL",
+      "style" : {
+        "backgroundColor" : "#F0A33D"
+      },
+      "position" : {
+        "x" : 761.2639419404125,
+        "y" : 588.5115226337448
+      },
+      "label" : "admissions_app_sql_1",
+      "id" : "dndnode_0.47973944575022687",
+      "height" : 65,
+      "sql" : "SELECT\n    fileyear,\n    filemonth,\n    termcode,\n    ApplicationId,\n    Application.ApplicationFee.ApplicationFeeAmount,\n    Application.ApplicationFee.FeeWaiverApprovalStatus,\n    Application.ApplicationFee.FeeTypeCode,\n    Applicant.GovernmentMilitary.MilitaryRelationshipStatusCode,\n    Applicant.GovernmentMilitary.PlanSubmitMilitaryTranscript,\n    Applicant.GovernmentMilitary.IsMilitaryDependent,\n    Application.TribalEnrollmentNumber,\n    Application.TribalMemberStatus,\n    Application.AmericanIndianOutReach,\n    Application.SpecialAppType,\n    Application.EopFlag,\n    Application.IbDiplomaFlag,\n    Application.RolloverUcApplicationId,\n    StudentReleaseCode.text_value AS StudentReleaseCode,\n    RestrictedScholarshipCode.text_value AS RestrictedScholarshipCode,\n    ApplicationQuestion.QuestionTitle,\n    ApplicationQuestion.AnswerText,\n    OtherStudentAchievement.AchievementCategoryCode,\n    OtherStudentAchievement.AchievementTitle,\n    OtherStudentAchievement.AchievementDescription,\n    OtherStudentAchievement.AchievementAwardYearMonth,\n    OtherStudentAchievement.AchievementGradeLevel,\n    OtherStudentAchievement.AchievementLevel,\n    OtherStudentAchievement.AchievementRequirement,\n    CAST(Applicant.Person.PersonId AS int) AS PersonId,\n    Applicant.Person.AgencyIdentifier,\n    Applicant.Person.SSN,\n    TO_DATE(Applicant.Person.Birth.BirthDate, 'yyyy-MM-dd') AS BirthDate,\n    Applicant.Person.Birth.BirthCity,\n    Applicant.Person.Birth.BirthStateProvinceCode,\n    Applicant.Person.Birth.BirthCountry,\n    Applicant.Person.Birth.BirthCountryName,\n    Applicant.Person.Name.FirstName,\n    Applicant.Person.Name.MiddleName,\n    Applicant.Person.Name.LastName,\n    Applicant.Person.Name.NameSuffix,\n    AlternateName.FirstName AS AlternateFirstName,\n    AlternateName.MiddleName AS AlternateMiddleName,\n    AlternateName.LastName AS AlternateLastName,\n    AlternateName.NameSuffix AS AlternateNameSuffix,\n    Applicant.Person.PreferredName.FirstName AS PreferredFirstName,\n    Applicant.Person.Citizenship.CitizenshipStatusCode,\n    Applicant.Person.Citizenship.CitizenshipCountryCode,\n    Applicant.Person.Citizenship.CitizenshipCountryName,\n    Applicant.Person.Contacts.PermanentAddress.AddressLine AS PermAddressLine,\n    Applicant.Person.Contacts.PermanentAddress.City AS PermCity,\n    Applicant.Person.Contacts.PermanentAddress.County AS PermCounty,\n    Applicant.Person.Contacts.PermanentAddress.StateProvince AS PermStateProvince,\n    Applicant.Person.Contacts.PermanentAddress.StateProvinceCode AS PermStateProvinceCode,\n    Applicant.Person.Contacts.PermanentAddress.PostalCode AS PermPostalCode,\n    Applicant.Person.Contacts.PermanentAddress.CountryCode AS PermCountryCode,\n    Applicant.Person.Contacts.PermanentAddress.CountryName AS PermCountryName,\n    Applicant.Person.Contacts.CurrentAddress.AddressLine AS CurrAddressLine,\n    Applicant.Person.Contacts.CurrentAddress.City AS CurrCity,\n    Applicant.Person.Contacts.CurrentAddress.StateProvince AS CurrStateProvince,\n    Applicant.Person.Contacts.CurrentAddress.StateProvinceCode AS CurrStateProvinceCode,\n    Applicant.Person.Contacts.CurrentAddress.PostalCode AS CurrPostalCode,\n    Applicant.Person.Contacts.CurrentAddress.CountryCode AS CurrCountryCode,\n    Applicant.Person.Contacts.CurrentAddress.CountryName AS CurrCountryName,\n    Applicant.Person.Contacts.PermanentPhone.PhoneNumber AS PermPhoneNumber,\n    Applicant.Person.Contacts.PermanentPhone.IntlPhoneNumber AS PermIntlPhoneNumber,\n    Applicant.Person.Contacts.PermanentPhone.TelephoneType AS PermTelephoneType,\n    Applicant.Person.Contacts.PermanentPhone.TextMsgAuthorized AS PermTextMsgAuthorized,\n    Applicant.Person.Contacts.DayPhone.PhoneNumber AS CurrPhoneNumber,\n    Applicant.Person.Contacts.DayPhone.IntlPhoneNumber AS CurrIntlPhoneNumber,\n    Applicant.Person.Contacts.DayPhone.TelephoneType AS CurrTelephoneType,\n    Applicant.Person.Contacts.DayPhone.TextMsgAuthorized AS CurrTextMsgAuthorized,\n    Applicant.Person.Contacts.PrimaryEmail.EmailAddress AS CurrEmailAddress,\n    Applicant.Person.Contacts.HomeLocation AS HomeLocation,\n    Applicant.Person.Gender.GenderCode AS GenderCode,\n    Applicant.Person.EthnicityRace.EthnicityCode AS EthnicityCode,\n    RaceCode.text_value AS RaceCode,\n    LocalEthnicityRaceCode.EthnicAfricanAmericanBlackCode AS EthnicAfricanAmericanBlackCode,\n    LocalEthnicityRaceCode.OtherAfricanDesc AS OtherAfricanDesc,\n    LocalEthnicityRaceCode.EthnicAmericanIndianAlaskanNativeCode AS EthnicAmericanIndianAlaskanNativeCode,\n    LocalEthnicityRaceCode.NativeTribalAffiliation AS NativeTribalAffiliation,\n    LocalEthnicityRaceCode.EthnicAsianAsianAmericanCode AS EthnicAsianAsianAmericanCode,\n    LocalEthnicityRaceCode.OtherAsianDesc AS OtherAsianDesc,\n    LocalEthnicityRaceCode.EthnicHispanicLatinoCode AS EthnicHispanicLatinoCode,\n    LocalEthnicityRaceCode.OtherLatinoDesc AS OtherLatinoDesc,\n    LocalEthnicityRaceCode.EthnicPacificIslanderCode AS EthnicPacificIslanderCode,\n    LocalEthnicityRaceCode.OtherPacificIslanderDesc AS OtherPacificIslanderDesc,\n    LocalEthnicityRaceCode.EthnicWhiteCaucasianCode AS EthnicWhiteCaucasianCode,\n    LocalEthnicityRaceCode.OtherNorthAfricanDesc AS OtherNorthAfricanDesc,\n    LocalEthnicityRaceCode.OtherSouthwestAsianDesc AS OtherSouthwestAsianDesc,\n    LocalEthnicityRaceCode.OtherWhiteDesc AS OtherWhiteDesc,\n    Applicant.Person.Immigration.VisaDetail.NonImmigrantVisaType AS NonImmigrantVisaType,\n    Applicant.Person.Immigration.VisaDetail.NonImmigrantVisaAppliedFor AS NonImmigrantVisaAppliedFor,\n    TO_DATE(Employment.EmploymentBeginYearMonth, 'yyyy-MM-dd') AS EmploymentBeginYearMonth,\n    TO_DATE(Employment.EmploymentEndYearMonth, 'yyyy-MM-dd') AS EmploymentEndYearMonth,\n    Employment.PositionTitle AS PositionTitle,\n    Employment.JobDescription AS JobDescription,\n    Employment.NumberOfYearsAfterHs AS NumberOfYearsAfterHs,\n    Employment.EmploymentDuration AS EmploymentDuration,\n    Employment.EmployerName AS EmployerName,\n    Employment.EmployerDescription AS EmployerDescription,\n    GradeLevelWeeklyHours.GradeLevel AS GradeLevel,\n    GradeLevelWeeklyHours.EmploymentWeeklyHours AS EmploymentWeeklyHours,\n    GradeLevelWeeklyHours.EmploymentWeeklyHoursSummer AS EmploymentWeeklyHoursSummer,\n    Applicant.Person.FirstSpokenLanguage.LanguageCode AS LanguageCode,\n    Applicant.Person.FirstSpokenLanguage.LanguageName AS LanguageName,\n    Applicant.Person.FirstSpokenLanguage.LanguageUsage AS LanguageUsage,\n    Applicant.Person.CoppaConsent AS CoppaConsent,\n    SingleParentInfo.SingleParentFlag AS SingleParentFlag,\n    SingleParentInfo.UCSingleParentYear AS UCSingleParentYear,\n    Income.TotalIncome AS TotalIncome,\n    Income.UCIncomeYear AS UCIncomeYear,\n    DependentsInfo.DependentsNumber AS DepInfoDependentsNumber,\n    DependentsInfo.UCDependentsYear AS UCDependentsYear,\n    Applicant.Person.FosterCareFlag AS FosterCareFlag,\n    Applicant.Person.SexualOrientation AS SexualOrientation,\n    Applicant.Person.SexualOrientationOther AS SexualOrientationOther,\n    Applicant.Person.GenderIdentity AS GenderIdentity,\n    Applicant.Person.IsSSN AS IsSSN,\n    Applicant.Person.PrivacyConsentDate AS PrivacyConsentDate,\n    Applicant.Person.IsMarried AS IsMarried,\n    Applicant.Person.HasChildren AS HasChildren,\n    Applicant.Family.ParentsUCEmployFlag AS ParentsUCEmployFlag,\n    FamilySingleParentInfo.SingleParentFlag AS FamilySingleParentFlag,\n    FamilySingleParentInfo.UCSingleParentYear AS FamilyUCSingleParentYear,\n    FamilyMember.RelationshipCode AS FamilyRelationshipCode,\n    FamilyMember.Name.FirstName AS FamilyFirstName,\n    FamilyMember.Name.MiddleName AS FamilyMiddleName,\n    FamilyMember.Name.LastName AS FamilyLastName,\n    FamilyMember.Name.NameSuffix AS FamilyNameSuffix,\n    FamilyMember.Contacts.CurrentAddress.City AS FamilyCity,\n    FamilyMember.Contacts.CurrentAddress.StateProvince AS FamilyStateProvince,\n    FamilyMember.Contacts.CurrentAddress.PostalCode AS FamilyPostalCode,\n    FamilyMember.Contacts.CurrentAddress.CountryCode AS FamilyCountryCode,\n    FamilyMember.Contacts.CurrentAddress.CountryName AS FamilyCountryName,\n    FamilyMember.EducationLevel AS EducationLevel,\n    OccupationDetail.Occupation AS Occupation,\n    OccupationDetail.OccupationCategory AS OccupationCategory,\n    OccupationDetail.NumberOfYears AS NumberOfYears,\n    OccupationDetail.CurrentOccupationFlag AS CurrentOccupationFlag,\n    FamilyMember.RelationshipType AS RelationshipType,\n    FamilyMember.RelationshipTypeOther AS RelationshipTypeOther,\n    TO_DATE(FamilyMember.YearDeceased, 'yyyy-MM-dd') AS YearDeceased,\n    FamilyMember.RecentCollGrad AS RecentCollGrad,\n    FamilyIncome.FamilyIncomeAmount AS FamilyIncomeAmount,\n    FamilyIncome.UCIncomeYear AS FamilyUCIncomeYear,\n    FamilyDependents.DependentsNumber AS DependentsNumber,\n    FamilyDependents.UCDependentsYear AS FamilyUCDependentsYear,\n    Applicant.Family.ParentsHighestEducationLevel AS ParentsHighestEducationLevel,\n    Applicant.Family.ParentsRecentCollGrad AS ParentsRecentCollGrad,\n    Residency.RelationshipCode AS RelationshipCode,\n    TO_DATE(Residency.ResidencyEstablishedDate, 'yyyy-MM-dd') AS ResidencyEstablishedDate,\n    Residency.ResidencyStatusCode AS ResidencyStatusCode,\n    Residency.SlrResidencyStatusCode AS SlrResidencyStatusCode,\n    Residency.LivedCaOneYearFlag AS LivedCaOneYearFlag,\n    Residency.LastSchoolCaFlag AS LastSchoolCaFlag,\n    ResidencyCitizenship.CitizenshipStatusCode AS ResidencyCitizenshipStatusCode,\n    ResidencyCitizenship.CitizenshipCountryCode AS ResidencyCitizenshipCountryCode,\n    ResidencyCitizenship.CitizenshipCountryName AS ResidencyCitizenshipCountryName,\n    SelfReportedTests.TestCategory AS TestCategory,\n    SelfReportedTests.EducationTestCode AS EducationTestCode,\n    SelfReportedTests.TestYearMonth AS TestYearMonth,\n    EducationSubtest.EducationSubtestCode AS EducationSubtestCode,\n    EducationSubtest.ScoreValue AS subscorevalue,\n    SelfReportedTests.ScoreValue AS scorevalue,\n    SelfReportedTests.TestNotPlanned AS TestNotPlanned,\n    SelfReportedTests.RegistrationNumber AS RegistrationNumber,\n    SelfReportedTests.IsInvalid AS IsInvalid,\n    SelfReportedTests.TestName AS TestName,\n    SelfReportedTests.TestLevel AS TestLevel,\n    SelfReportedTests.TestSubject AS TestSubject,\n    CAST(SelfReportedTests.TestGradeScale AS int) AS TestGradeScale,\n    SelfReportedTests.TestPredictedScore AS TestPredictedScore,\n    ExtraCurricularActivity.ActivityCode AS ActivityCode,\n    ExtraCurricularActivity.ActivityName AS ActivityName,\n    ExtraCurricularActivity.ActivityDescription AS ActivityDescription,\n    ExtraCurricularActivity.GradeLevel AS ExtraCurricularGradeLevel,\n    ExtraCurricularActivity.NumberOfYearsAfterHs AS ExtracurricularNumberOfYearsAfterHs,\n    ExtraCurricularActivity.WeeklyHours AS WeeklyHours,\n    ExtraCurricularActivity.YearlyWeeks AS YearlyWeeks,\n    ExtraCurricularActivity.NoteMessage AS NoteMessage,\n    ExtraCurricularActivity.OrganizationDescription AS OrganizationDescription,\n    ApplicationDetail.ApplicationSession.SessionName AS SessionName,\n    CAST(ApplicationDetail.ApplicationSession.SessionSchoolYear AS int) AS SessionSchoolYear,\n    TO_DATE(ApplicationDetail.ApplicationReceivedDate, 'yyyy-MM-dd') AS ApplicationReceivedDate,\n    TO_DATE(ApplicationDetail.WipDate, 'yyyy-MM-dd') AS WipDate,\n    ApplicationDetail.ApplicantAlert AS ApplicantAlert,\n    CampusAppliedDetail.CampusName AS CampusName,\n    TO_DATE(CampusAppliedDetail.SendToCampusDate, 'yyyy-MM-dd') AS SendToCampusDate,\n    ApplicationDegreeProgram.AcademicProgramCollege.CollegeCode AS CollegeCode,\n    ApplicationDegreeProgram.Preauthorized AS Preauthorized,\n    ApplicationDegreeProgram.AcademicProgramDetail.AcademicProgramType AS AcademicProgramType,\n    ApplicationDegreeProgram.AcademicProgramDetail.AcademicProgramName AS AcademicProgramName,\n    CampusAppliedDetail.ApplicationType AS ApplicationType,\n    CampusAppliedDetail.AdmitStatus AS AdmitStatus,\n    CampusAppliedDetail.SirStatus AS SirStatus,\n    CampusAppliedDetail.CanceledFlag AS CanceledFlag,\n    CampusAppliedDetail.CanceledCode AS CanceledCode,\n    CampusAppliedDetail.CanceledDate AS CanceledDate,\n    UCSDCampusPreference.UCSDCampus AS UCSDCampus,\n    CAST(UCSDCampusPreference.Preference AS int) AS Preference,\n    CampusAppliedDetail.WaitlistCode AS WaitlistCode,\n    EducationHistory.SchoolLastAttended AS SchoolLastAttended,\n    EducationHistory.MixedRecordIndicator AS MixedRecordIndicator,\n    EducationHistory.MixedRecordIndicatorUcap AS MixedRecordIndicatorUcap,\n    EducationHistory.MixedRecordCollegeIndicator AS MixedRecordCollegeIndicator,\n    EducationHistory.LanguageOfInstruction68.LanguageCode AS Lang68_LanguageCode,\n    EducationHistory.LanguageOfInstruction68.LanguageName AS Lang68_LanguageName,\n    EducationHistory.LanguageOfInstruction912.LanguageCode AS Lang912_LanguageCode,\n    EducationHistory.LanguageOfInstruction912.LanguageName AS Lang912_LanguageName,\n    EducationHistory.LanguageOfInstruction912NonEnglish AS LanguageOfInstruction912NonEnglish,\n    EducationHistory.GradingSystemUcap AS GradingSystemUcap,\n    EducationHistory.BreakInEducationFlag AS BreakInEducationFlag,\n    EducationHistory.BreakInEducationDescription AS BreakInEducationDescription,\n    EducationHistory.TransferSummaryApplicant.TransferGpa AS TransferGpa,\n    EducationHistory.TransferSummaryApplicant.TransferQtrUnits AS TransferQtrUnits,\n    EducationHistory.TransferSummaryApplicant.TransferSemUnits AS TransferSemUnits,\n    EducationHistory.TransferSummaryApplicant.IgetcCompletedFlag AS IgetcCompletedFlag,\n    EducationHistory.TransferSummaryApplicant.EnglishRequirementStatus AS EnglishRequirementStatus,\n    EducationHistory.TransferSummaryApplicant.MathRequirementStatus AS MathRequirementStatus,\n    EducationHistory.TransferSummaryApplicant.SubjectAreaRequirementStatus AS SubjectAreaRequirementStatus,\n    EducationHistory.TransferSummaryApplicant.BreakInEducationFlag AS TransferBreakInEducationFlag,\n    EducationHistory.TransferSummaryApplicant.BreakInEducationDescription AS TransferBreakInEducationDescription,\n    EducationHistory.TransferSummaryApplicant.EngCompTransCourseDept1 AS EngCompTransCourseDept1,\n    EducationHistory.TransferSummaryApplicant.EngCompTransCourseDept2 AS EngCompTransCourseDept2,\n    EducationHistory.TransferSummaryApplicant.EngCompTransCourseName1 AS EngCompTransCourseName1,\n    EducationHistory.TransferSummaryApplicant.EngCompTransCourseName2 AS EngCompTransCourseName2,\n    EducationHistory.TransferSummaryApplicant.EngCompTransCourseNumber1 AS EngCompTransCourseNumber1,\n    EducationHistory.TransferSummaryApplicant.EngCompTransCourseNumber2 AS EngCompTransCourseNumber2,\n    EducationHistory.TransferSummaryApplicant.MathTransCourseDept AS MathTransCourseDept,\n    EducationHistory.TransferSummaryApplicant.MathTransCourseName AS MathTransCourseName,\n    EducationHistory.TransferSummaryApplicant.MathTransCourseNumber AS MathTransCourseNumber,\n    EducationHistory.TransferSummaryApplicant.ProbationNonUc AS ProbationNonUc,\n    EducationHistory.TransferSummaryApplicant.ProbationNonUcCampusName AS ProbationNonUcCampusName,\n    EducationHistory.TransferSummaryApplicant.ProbationUc AS ProbationUc,\n    EducationHistory.TransferSummaryApplicant.ProbationUcCampusName AS ProbationUcCampusName,\n    EducationHistory.TransferSummaryApplicant.GeneralEducation AS GeneralEducation,\n    EducationHistory.TransferSummaryApplicant.ELWR AS ELWR,\n    EducationHistory.TransferSummaryApplicant.TransferPathwayMajor AS TransferPathwayMajor\nFROM\n    applicant"
+    }
+  }, {
+    "name" : "admissionsapplication_1",
+    "type" : "fileparquet",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "maxLinkAllowed" : 1,
+      "partitionBy" : "fileyear,filemonth,termcode",
+      "dependsOn" : [ "admissions_app_sql_1" ],
+      "icon" : "https://dev-api.datamorph.ai/iconslight/parquet.svg",
+      "batch" : true,
+      "format" : "parquet",
+      "extras" : "Parquet",
+      "label" : "admissionsapplication_1",
+      "path" : "${ADMISSIONS_APPLICATION_TABLE_PATH}",
+      "ui" : {
+        "x" : 825,
+        "y" : 630
+      },
+      "width" : 114,
+      "outputmode" : "append",
+      "style" : {
+        "backgroundColor" : "#4ABC97"
+      },
+      "position" : {
+        "x" : 909.2639419404125,
+        "y" : 594.5115226337448
+      },
+      "id" : "dndnode_0.9230343117098663",
+      "height" : 65
+    }
+  }, {
+    "name" : "CSV_Source",
+    "type" : "filecsv",
+    "nodeType" : "source",
+    "description" : "test",
+    "properties" : {
+      "select" : "*",
+      "enforceSchema" : true,
+      "multiLine" : false,
+      "icon" : "https://dev-api.datamorph.ai/iconslight/csv.svg",
+      "extras" : "CSV",
+      "distinct" : false,
+      "inferSchema" : false,
+      "maxColumns" : 20480,
+      "path" : "s3://datamorph-dev/datasets/customer_loan/customer-loan.csv",
+      "ui" : {
+        "x" : 15,
+        "y" : 135
+      },
+      "spark" : {
+        "sql" : {
+          "files" : {
+            "ignoreCorruptFiles" : false,
+            "ignoreMissingFiles" : false
+          }
+        }
+      },
+      "id" : "dndnode_0.8722983476882331",
+      "recursiveFileLookup" : false,
+      "height" : 40,
+      "ignoreTrailingWhiteSpace" : false,
+      "dependsOn" : [ ],
+      "spark.sql.files.ignoreCorruptFiles" : false,
+      "batch" : true,
+      "format" : "csv",
+      "label" : "CSV_Source",
+      "samplingRatio" : 1,
+      "ignoreLeadingWhiteSpace" : false,
+      "spark.sql.files.ignoreMissingFiles" : false,
+      "width" : 80,
+      "header" : false,
+      "style" : {
+        "backgroundColor" : "#754EFB",
+        "borderRadius" : "3px",
+        "color" : "white",
+        "minWidth" : "80px",
+        "overflow" : "visible",
+        "fontSize" : "8px",
+        "transition" : "0.2s ease-in-out box-shadow",
+        "width" : "80px",
+        "marginBottom" : "10px"
+      },
+      "position" : {
+        "x" : 39,
+        "y" : 137
+      },
+      "maxCharsPerColumn" : -1
+    }
+  }, {
+    "name" : "avro_1",
+    "type" : "fileavro",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "select" : "*",
+      "dependsOn" : [ ],
+      "icon" : "https://dev-api.datamorph.ai/iconslight/avro.svg",
+      "batch" : true,
+      "format" : "avro",
+      "extras" : "Avro",
+      "distinct" : false,
+      "label" : "avro_1",
+      "path" : "s3://datamorph-dev/datasets/customer_loan/customer-loan.csv",
+      "ui" : {
+        "x" : 15,
+        "y" : 15
+      },
+      "spark" : {
+        "sql" : {
+          "files" : {
+            "ignoreCorruptFiles" : false,
+            "ignoreMissingFiles" : false
+          }
+        }
+      },
+      "width" : 80,
+      "style" : {
+        "backgroundColor" : "#754EFB",
+        "borderRadius" : "3px",
+        "color" : "white",
+        "minWidth" : "80px",
+        "overflow" : "visible",
+        "fontSize" : "8px",
+        "transition" : "0.2s ease-in-out box-shadow",
+        "width" : "80px",
+        "marginBottom" : "10px"
+      },
+      "position" : {
+        "x" : 10,
+        "y" : 10
+      },
+      "id" : "dndnode_0.729756808397664",
+      "recursiveFileLookup" : false,
+      "height" : 40
+    }
+  }, {
     "name" : "fixed_width_1",
     "type" : "filefixedwidth",
     "nodeType" : "source",
@@ -436,111 +733,6 @@
       "height" : 40
     }
   }, {
-    "name" : "avro_1",
-    "type" : "fileavro",
-    "nodeType" : "source",
-    "description" : "",
-    "properties" : {
-      "select" : "*",
-      "dependsOn" : [ ],
-      "icon" : "https://dev-api.datamorph.ai/iconslight/avro.svg",
-      "batch" : true,
-      "format" : "avro",
-      "extras" : "Avro",
-      "distinct" : false,
-      "label" : "avro_1",
-      "path" : "s3://datamorph-dev/datasets/customer_loan/customer-loan.csv",
-      "ui" : {
-        "x" : 15,
-        "y" : 15
-      },
-      "spark" : {
-        "sql" : {
-          "files" : {
-            "ignoreCorruptFiles" : false,
-            "ignoreMissingFiles" : false
-          }
-        }
-      },
-      "width" : 80,
-      "style" : {
-        "backgroundColor" : "#754EFB",
-        "borderRadius" : "3px",
-        "color" : "white",
-        "minWidth" : "80px",
-        "overflow" : "visible",
-        "fontSize" : "8px",
-        "transition" : "0.2s ease-in-out box-shadow",
-        "width" : "80px",
-        "marginBottom" : "10px"
-      },
-      "position" : {
-        "x" : 10,
-        "y" : 10
-      },
-      "id" : "dndnode_0.729756808397664",
-      "recursiveFileLookup" : false,
-      "height" : 40
-    }
-  }, {
-    "name" : "CSV_Source",
-    "type" : "filecsv",
-    "nodeType" : "source",
-    "description" : "test",
-    "properties" : {
-      "select" : "*",
-      "enforceSchema" : true,
-      "multiLine" : false,
-      "icon" : "https://dev-api.datamorph.ai/iconslight/csv.svg",
-      "extras" : "CSV",
-      "distinct" : false,
-      "inferSchema" : false,
-      "maxColumns" : 20480,
-      "path" : "s3://datamorph-dev/datasets/customer_loan/customer-loan.csv",
-      "ui" : {
-        "x" : 15,
-        "y" : 135
-      },
-      "spark" : {
-        "sql" : {
-          "files" : {
-            "ignoreCorruptFiles" : false,
-            "ignoreMissingFiles" : false
-          }
-        }
-      },
-      "id" : "dndnode_0.8722983476882331",
-      "recursiveFileLookup" : false,
-      "height" : 40,
-      "ignoreTrailingWhiteSpace" : false,
-      "dependsOn" : [ ],
-      "spark.sql.files.ignoreCorruptFiles" : false,
-      "batch" : true,
-      "format" : "csv",
-      "label" : "CSV_Source",
-      "samplingRatio" : 1,
-      "ignoreLeadingWhiteSpace" : false,
-      "spark.sql.files.ignoreMissingFiles" : false,
-      "width" : 80,
-      "header" : false,
-      "style" : {
-        "backgroundColor" : "#754EFB",
-        "borderRadius" : "3px",
-        "color" : "white",
-        "minWidth" : "80px",
-        "overflow" : "visible",
-        "fontSize" : "8px",
-        "transition" : "0.2s ease-in-out box-shadow",
-        "width" : "80px",
-        "marginBottom" : "10px"
-      },
-      "position" : {
-        "x" : 39,
-        "y" : 137
-      },
-      "maxCharsPerColumn" : -1
-    }
-  }, {
     "name" : "sql_1",
     "type" : "sql",
     "nodeType" : "processor",
@@ -628,198 +820,6 @@
       "quoteAll" : false,
       "selected" : true,
       "height" : 40
-    }
-  }, {
-    "name" : "apply_uc_1",
-    "type" : "delta",
-    "nodeType" : "source",
-    "description" : "",
-    "properties" : {
-      "dependsOn" : [ ],
-      "icon" : "https://dev-api.datamorph.ai/iconslight/deltalake.svg",
-      "batch" : true,
-      "format" : "delta",
-      "extras" : "Delta",
-      "label" : "apply_uc_1",
-      "path" : "${APPLY_UC_TABLE_PATH}",
-      "ui" : {
-        "x" : 15,
-        "y" : 510
-      },
-      "width" : 114,
-      "style" : {
-        "backgroundColor" : "#754EFB"
-      },
-      "position" : {
-        "x" : 28.263941940412508,
-        "y" : 550.5115226337448
-      },
-      "id" : "dndnode_0.6305795869318223",
-      "height" : 65
-    }
-  }, {
-    "name" : "admissions_base_sql_1",
-    "type" : "sql",
-    "nodeType" : "processor",
-    "description" : "",
-    "properties" : {
-      "dependsOn" : [ "apply_uc_1" ],
-      "ui" : {
-        "x" : 150,
-        "y" : 555
-      },
-      "width" : 114,
-      "icon" : "https://dev-api.datamorph.ai/iconslight/transformation-sql.svg",
-      "extras" : "SQL",
-      "style" : {
-        "backgroundColor" : "#F0A33D"
-      },
-      "position" : {
-        "x" : 188.2639419404125,
-        "y" : 589.5115226337448
-      },
-      "label" : "admissions_base_sql_1",
-      "id" : "dndnode_0.8702050902494232",
-      "height" : 65,
-      "sql" : "SELECT\n    fileyear,\n    filemonth,\n    termcode,\n    aa.*\nFROM\n    apply_uc\n    LATERAL VIEW OUTER EXPLODE(UndergraduateAdmissionsRecord) AS ug\n    LATERAL VIEW OUTER EXPLODE(ug.AdmissionsApplication) AS aa"
-    }
-  }, {
-    "name" : "drop_trans_appl_applicationid_data_1",
-    "type" : "dropcolumnsprocessor",
-    "nodeType" : "processor",
-    "description" : "",
-    "properties" : {
-      "maxLinkAllowed" : 1,
-      "dropColumns" : "admissions_base_sql_1.TransmissionData,\nadmissions_base_sql_1.Applicant.ApplicationId",
-      "dependsOn" : [ "admissions_base_sql_1" ],
-      "icon" : "https://dev-api.datamorph.ai/iconslight/transformation-dropcolumns.svg",
-      "extras" : "Drop Columns",
-      "label" : "drop_trans_appl_applicationid_data_1",
-      "dropColumnIfAllNull" : false,
-      "ui" : {
-        "x" : 285,
-        "y" : 615
-      },
-      "width" : 114,
-      "style" : {
-        "backgroundColor" : "#F0A33D"
-      },
-      "position" : {
-        "x" : 322.2639419404125,
-        "y" : 591.5115226337448
-      },
-      "id" : "dndnode_0.09518902374493621",
-      "height" : 65
-    }
-  }, {
-    "name" : "applicant_base_1",
-    "type" : "sql",
-    "nodeType" : "processor",
-    "description" : "",
-    "properties" : {
-      "dependsOn" : [ "drop_trans_appl_applicationid_data_1" ],
-      "ui" : {
-        "x" : 420,
-        "y" : 615
-      },
-      "width" : 114,
-      "icon" : "https://dev-api.datamorph.ai/iconslight/transformation-sql.svg",
-      "extras" : "SQL",
-      "style" : {
-        "backgroundColor" : "#F0A33D"
-      },
-      "position" : {
-        "x" : 468.2639419404125,
-        "y" : 589.5115226337448
-      },
-      "label" : "applicant_base_1",
-      "id" : "dndnode_0.7879581522071202",
-      "height" : 65,
-      "sql" : "SELECT\n    *\nFROM\n    drop_trans_appl_applicationid_data\n    LATERAL VIEW OUTER EXPLODE(Applicant.Application) AS Application\n    LATERAL VIEW OUTER EXPLODE(Application.ApplicationQuestion) AS ApplicationQuestion\n    LATERAL VIEW OUTER EXPLODE(Application.StudentReleaseCode) AS StudentReleaseCode\n    LATERAL VIEW OUTER EXPLODE(Application.EducationHistory) AS EducationHistory\n    LATERAL VIEW OUTER EXPLODE(Application.RestrictedScholarshipCode) AS RestrictedScholarshipCode\n    LATERAL VIEW OUTER EXPLODE(Application.ApplicationDetail) AS ApplicationDetail\n    LATERAL VIEW OUTER EXPLODE(ApplicationDetail.CampusAppliedDetail) AS CampusAppliedDetail\n    LATERAL VIEW OUTER EXPLODE(CampusAppliedDetail.UCSDCampusPreference) AS UCSDCampusPreference\n    LATERAL VIEW OUTER EXPLODE(CampusAppliedDetail.ApplicationDegreeProgram) AS ApplicationDegreeProgram\n    LATERAL VIEW OUTER EXPLODE(Application.AdditionalStudentAchievements.OtherStudentAchievement) AS OtherStudentAchievement\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.AlternateName) AS AlternateName\n    LATERAL VIEW OUTER EXPLODE(Applicant.SelfReportedTests) AS SelfReportedTests\n    LATERAL VIEW OUTER EXPLODE(SelfReportedTests.EducationSubtest) AS EducationSubtest\n    LATERAL VIEW OUTER EXPLODE(Applicant.ExtraCurricularActivity) AS ExtraCurricularActivity\n    LATERAL VIEW OUTER EXPLODE(Applicant.Residency) AS Residency\n    LATERAL VIEW OUTER EXPLODE(Residency.Citizenship) AS ResidencyCitizenship\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.Citizenship) AS Citizenship\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.SingleParentInfo) AS SingleParentInfo\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.Income) AS Income\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.DependentsInfo) AS DependentsInfo\n    LATERAL VIEW OUTER EXPLODE(Applicant.Family.SingleParentInfo) AS FamilySingleParentInfo\n    LATERAL VIEW OUTER EXPLODE(Applicant.Family.FamilyIncome) AS FamilyIncome\n    LATERAL VIEW OUTER EXPLODE(Applicant.Family.FamilyDependents) AS FamilyDependents\n    LATERAL VIEW OUTER EXPLODE(Applicant.Family.FamilyMember) AS FamilyMember\n    LATERAL VIEW OUTER EXPLODE(FamilyMember.OccupationDetail) AS OccupationDetail\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.EthnicityRace.RaceCode) AS RaceCode\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.EthnicityRace.LocalEthnicityRaceCode) AS LocalEthnicityRaceCode\n    LATERAL VIEW OUTER EXPLODE(Applicant.Person.Employment) AS Employment\n    LATERAL VIEW OUTER EXPLODE(Employment.GradeLevelWeeklyHours) AS GradeLevelWeeklyHours"
-    }
-  }, {
-    "name" : "applicant_1",
-    "type" : "dropcolumnsprocessor",
-    "nodeType" : "processor",
-    "description" : "",
-    "properties" : {
-      "maxLinkAllowed" : 1,
-      "dropColumns" : [ "Application.Application", "Application.ApplicationId" ],
-      "dependsOn" : [ "applicant_base_1" ],
-      "ui" : {
-        "x" : 555,
-        "y" : 630
-      },
-      "width" : 114,
-      "icon" : "https://dev-api.datamorph.ai/iconslight/transformation-dropcolumns.svg",
-      "extras" : "Drop Columns",
-      "style" : {
-        "backgroundColor" : "#F0A33D"
-      },
-      "position" : {
-        "x" : 607.2639419404125,
-        "y" : 590.5115226337448
-      },
-      "label" : "applicant_1",
-      "id" : "dndnode_0.5797597493558768",
-      "height" : 65
-    }
-  }, {
-    "name" : "admissions_app_sql_1",
-    "type" : "sql",
-    "nodeType" : "processor",
-    "description" : "",
-    "properties" : {
-      "dependsOn" : [ "applicant_1" ],
-      "ui" : {
-        "x" : 690,
-        "y" : 630
-      },
-      "width" : 114,
-      "icon" : "https://dev-api.datamorph.ai/iconslight/transformation-sql.svg",
-      "extras" : "SQL",
-      "style" : {
-        "backgroundColor" : "#F0A33D"
-      },
-      "position" : {
-        "x" : 761.2639419404125,
-        "y" : 588.5115226337448
-      },
-      "label" : "admissions_app_sql_1",
-      "id" : "dndnode_0.47973944575022687",
-      "height" : 65,
-      "sql" : "SELECT\n    fileyear,\n    filemonth,\n    termcode,\n    ApplicationId,\n    Application.ApplicationFee.ApplicationFeeAmount,\n    Application.ApplicationFee.FeeWaiverApprovalStatus,\n    Application.ApplicationFee.FeeTypeCode,\n    Applicant.GovernmentMilitary.MilitaryRelationshipStatusCode,\n    Applicant.GovernmentMilitary.PlanSubmitMilitaryTranscript,\n    Applicant.GovernmentMilitary.IsMilitaryDependent,\n    Application.TribalEnrollmentNumber,\n    Application.TribalMemberStatus,\n    Application.AmericanIndianOutReach,\n    Application.SpecialAppType,\n    Application.EopFlag,\n    Application.IbDiplomaFlag,\n    Application.RolloverUcApplicationId,\n    StudentReleaseCode.text_value AS StudentReleaseCode,\n    RestrictedScholarshipCode.text_value AS RestrictedScholarshipCode,\n    ApplicationQuestion.QuestionTitle,\n    ApplicationQuestion.AnswerText,\n    OtherStudentAchievement.AchievementCategoryCode,\n    OtherStudentAchievement.AchievementTitle,\n    OtherStudentAchievement.AchievementDescription,\n    OtherStudentAchievement.AchievementAwardYearMonth,\n    OtherStudentAchievement.AchievementGradeLevel,\n    OtherStudentAchievement.AchievementLevel,\n    OtherStudentAchievement.AchievementRequirement,\n    CAST(Applicant.Person.PersonId AS int) AS PersonId,\n    Applicant.Person.AgencyIdentifier,\n    Applicant.Person.SSN,\n    TO_DATE(Applicant.Person.Birth.BirthDate, 'yyyy-MM-dd') AS BirthDate,\n    Applicant.Person.Birth.BirthCity,\n    Applicant.Person.Birth.BirthStateProvinceCode,\n    Applicant.Person.Birth.BirthCountry,\n    Applicant.Person.Birth.BirthCountryName,\n    Applicant.Person.Name.FirstName,\n    Applicant.Person.Name.MiddleName,\n    Applicant.Person.Name.LastName,\n    Applicant.Person.Name.NameSuffix,\n    AlternateName.FirstName AS AlternateFirstName,\n    AlternateName.MiddleName AS AlternateMiddleName,\n    AlternateName.LastName AS AlternateLastName,\n    AlternateName.NameSuffix AS AlternateNameSuffix,\n    Applicant.Person.PreferredName.FirstName AS PreferredFirstName,\n    Applicant.Person.Citizenship.CitizenshipStatusCode,\n    Applicant.Person.Citizenship.CitizenshipCountryCode,\n    Applicant.Person.Citizenship.CitizenshipCountryName,\n    Applicant.Person.Contacts.PermanentAddress.AddressLine AS PermAddressLine,\n    Applicant.Person.Contacts.PermanentAddress.City AS PermCity,\n    Applicant.Person.Contacts.PermanentAddress.County AS PermCounty,\n    Applicant.Person.Contacts.PermanentAddress.StateProvince AS PermStateProvince,\n    Applicant.Person.Contacts.PermanentAddress.StateProvinceCode AS PermStateProvinceCode,\n    Applicant.Person.Contacts.PermanentAddress.PostalCode AS PermPostalCode,\n    Applicant.Person.Contacts.PermanentAddress.CountryCode AS PermCountryCode,\n    Applicant.Person.Contacts.PermanentAddress.CountryName AS PermCountryName,\n    Applicant.Person.Contacts.CurrentAddress.AddressLine AS CurrAddressLine,\n    Applicant.Person.Contacts.CurrentAddress.City AS CurrCity,\n    Applicant.Person.Contacts.CurrentAddress.StateProvince AS CurrStateProvince,\n    Applicant.Person.Contacts.CurrentAddress.StateProvinceCode AS CurrStateProvinceCode,\n    Applicant.Person.Contacts.CurrentAddress.PostalCode AS CurrPostalCode,\n    Applicant.Person.Contacts.CurrentAddress.CountryCode AS CurrCountryCode,\n    Applicant.Person.Contacts.CurrentAddress.CountryName AS CurrCountryName,\n    Applicant.Person.Contacts.PermanentPhone.PhoneNumber AS PermPhoneNumber,\n    Applicant.Person.Contacts.PermanentPhone.IntlPhoneNumber AS PermIntlPhoneNumber,\n    Applicant.Person.Contacts.PermanentPhone.TelephoneType AS PermTelephoneType,\n    Applicant.Person.Contacts.PermanentPhone.TextMsgAuthorized AS PermTextMsgAuthorized,\n    Applicant.Person.Contacts.DayPhone.PhoneNumber AS CurrPhoneNumber,\n    Applicant.Person.Contacts.DayPhone.IntlPhoneNumber AS CurrIntlPhoneNumber,\n    Applicant.Person.Contacts.DayPhone.TelephoneType AS CurrTelephoneType,\n    Applicant.Person.Contacts.DayPhone.TextMsgAuthorized AS CurrTextMsgAuthorized,\n    Applicant.Person.Contacts.PrimaryEmail.EmailAddress AS CurrEmailAddress,\n    Applicant.Person.Contacts.HomeLocation AS HomeLocation,\n    Applicant.Person.Gender.GenderCode AS GenderCode,\n    Applicant.Person.EthnicityRace.EthnicityCode AS EthnicityCode,\n    RaceCode.text_value AS RaceCode,\n    LocalEthnicityRaceCode.EthnicAfricanAmericanBlackCode AS EthnicAfricanAmericanBlackCode,\n    LocalEthnicityRaceCode.OtherAfricanDesc AS OtherAfricanDesc,\n    LocalEthnicityRaceCode.EthnicAmericanIndianAlaskanNativeCode AS EthnicAmericanIndianAlaskanNativeCode,\n    LocalEthnicityRaceCode.NativeTribalAffiliation AS NativeTribalAffiliation,\n    LocalEthnicityRaceCode.EthnicAsianAsianAmericanCode AS EthnicAsianAsianAmericanCode,\n    LocalEthnicityRaceCode.OtherAsianDesc AS OtherAsianDesc,\n    LocalEthnicityRaceCode.EthnicHispanicLatinoCode AS EthnicHispanicLatinoCode,\n    LocalEthnicityRaceCode.OtherLatinoDesc AS OtherLatinoDesc,\n    LocalEthnicityRaceCode.EthnicPacificIslanderCode AS EthnicPacificIslanderCode,\n    LocalEthnicityRaceCode.OtherPacificIslanderDesc AS OtherPacificIslanderDesc,\n    LocalEthnicityRaceCode.EthnicWhiteCaucasianCode AS EthnicWhiteCaucasianCode,\n    LocalEthnicityRaceCode.OtherNorthAfricanDesc AS OtherNorthAfricanDesc,\n    LocalEthnicityRaceCode.OtherSouthwestAsianDesc AS OtherSouthwestAsianDesc,\n    LocalEthnicityRaceCode.OtherWhiteDesc AS OtherWhiteDesc,\n    Applicant.Person.Immigration.VisaDetail.NonImmigrantVisaType AS NonImmigrantVisaType,\n    Applicant.Person.Immigration.VisaDetail.NonImmigrantVisaAppliedFor AS NonImmigrantVisaAppliedFor,\n    TO_DATE(Employment.EmploymentBeginYearMonth, 'yyyy-MM-dd') AS EmploymentBeginYearMonth,\n    TO_DATE(Employment.EmploymentEndYearMonth, 'yyyy-MM-dd') AS EmploymentEndYearMonth,\n    Employment.PositionTitle AS PositionTitle,\n    Employment.JobDescription AS JobDescription,\n    Employment.NumberOfYearsAfterHs AS NumberOfYearsAfterHs,\n    Employment.EmploymentDuration AS EmploymentDuration,\n    Employment.EmployerName AS EmployerName,\n    Employment.EmployerDescription AS EmployerDescription,\n    GradeLevelWeeklyHours.GradeLevel AS GradeLevel,\n    GradeLevelWeeklyHours.EmploymentWeeklyHours AS EmploymentWeeklyHours,\n    GradeLevelWeeklyHours.EmploymentWeeklyHoursSummer AS EmploymentWeeklyHoursSummer,\n    Applicant.Person.FirstSpokenLanguage.LanguageCode AS LanguageCode,\n    Applicant.Person.FirstSpokenLanguage.LanguageName AS LanguageName,\n    Applicant.Person.FirstSpokenLanguage.LanguageUsage AS LanguageUsage,\n    Applicant.Person.CoppaConsent AS CoppaConsent,\n    SingleParentInfo.SingleParentFlag AS SingleParentFlag,\n    SingleParentInfo.UCSingleParentYear AS UCSingleParentYear,\n    Income.TotalIncome AS TotalIncome,\n    Income.UCIncomeYear AS UCIncomeYear,\n    DependentsInfo.DependentsNumber AS DepInfoDependentsNumber,\n    DependentsInfo.UCDependentsYear AS UCDependentsYear,\n    Applicant.Person.FosterCareFlag AS FosterCareFlag,\n    Applicant.Person.SexualOrientation AS SexualOrientation,\n    Applicant.Person.SexualOrientationOther AS SexualOrientationOther,\n    Applicant.Person.GenderIdentity AS GenderIdentity,\n    Applicant.Person.IsSSN AS IsSSN,\n    Applicant.Person.PrivacyConsentDate AS PrivacyConsentDate,\n    Applicant.Person.IsMarried AS IsMarried,\n    Applicant.Person.HasChildren AS HasChildren,\n    Applicant.Family.ParentsUCEmployFlag AS ParentsUCEmployFlag,\n    FamilySingleParentInfo.SingleParentFlag AS FamilySingleParentFlag,\n    FamilySingleParentInfo.UCSingleParentYear AS FamilyUCSingleParentYear,\n    FamilyMember.RelationshipCode AS FamilyRelationshipCode,\n    FamilyMember.Name.FirstName AS FamilyFirstName,\n    FamilyMember.Name.MiddleName AS FamilyMiddleName,\n    FamilyMember.Name.LastName AS FamilyLastName,\n    FamilyMember.Name.NameSuffix AS FamilyNameSuffix,\n    FamilyMember.Contacts.CurrentAddress.City AS FamilyCity,\n    FamilyMember.Contacts.CurrentAddress.StateProvince AS FamilyStateProvince,\n    FamilyMember.Contacts.CurrentAddress.PostalCode AS FamilyPostalCode,\n    FamilyMember.Contacts.CurrentAddress.CountryCode AS FamilyCountryCode,\n    FamilyMember.Contacts.CurrentAddress.CountryName AS FamilyCountryName,\n    FamilyMember.EducationLevel AS EducationLevel,\n    OccupationDetail.Occupation AS Occupation,\n    OccupationDetail.OccupationCategory AS OccupationCategory,\n    OccupationDetail.NumberOfYears AS NumberOfYears,\n    OccupationDetail.CurrentOccupationFlag AS CurrentOccupationFlag,\n    FamilyMember.RelationshipType AS RelationshipType,\n    FamilyMember.RelationshipTypeOther AS RelationshipTypeOther,\n    TO_DATE(FamilyMember.YearDeceased, 'yyyy-MM-dd') AS YearDeceased,\n    FamilyMember.RecentCollGrad AS RecentCollGrad,\n    FamilyIncome.FamilyIncomeAmount AS FamilyIncomeAmount,\n    FamilyIncome.UCIncomeYear AS FamilyUCIncomeYear,\n    FamilyDependents.DependentsNumber AS DependentsNumber,\n    FamilyDependents.UCDependentsYear AS FamilyUCDependentsYear,\n    Applicant.Family.ParentsHighestEducationLevel AS ParentsHighestEducationLevel,\n    Applicant.Family.ParentsRecentCollGrad AS ParentsRecentCollGrad,\n    Residency.RelationshipCode AS RelationshipCode,\n    TO_DATE(Residency.ResidencyEstablishedDate, 'yyyy-MM-dd') AS ResidencyEstablishedDate,\n    Residency.ResidencyStatusCode AS ResidencyStatusCode,\n    Residency.SlrResidencyStatusCode AS SlrResidencyStatusCode,\n    Residency.LivedCaOneYearFlag AS LivedCaOneYearFlag,\n    Residency.LastSchoolCaFlag AS LastSchoolCaFlag,\n    ResidencyCitizenship.CitizenshipStatusCode AS ResidencyCitizenshipStatusCode,\n    ResidencyCitizenship.CitizenshipCountryCode AS ResidencyCitizenshipCountryCode,\n    ResidencyCitizenship.CitizenshipCountryName AS ResidencyCitizenshipCountryName,\n    SelfReportedTests.TestCategory AS TestCategory,\n    SelfReportedTests.EducationTestCode AS EducationTestCode,\n    SelfReportedTests.TestYearMonth AS TestYearMonth,\n    EducationSubtest.EducationSubtestCode AS EducationSubtestCode,\n    EducationSubtest.ScoreValue AS subscorevalue,\n    SelfReportedTests.ScoreValue AS scorevalue,\n    SelfReportedTests.TestNotPlanned AS TestNotPlanned,\n    SelfReportedTests.RegistrationNumber AS RegistrationNumber,\n    SelfReportedTests.IsInvalid AS IsInvalid,\n    SelfReportedTests.TestName AS TestName,\n    SelfReportedTests.TestLevel AS TestLevel,\n    SelfReportedTests.TestSubject AS TestSubject,\n    CAST(SelfReportedTests.TestGradeScale AS int) AS TestGradeScale,\n    SelfReportedTests.TestPredictedScore AS TestPredictedScore,\n    ExtraCurricularActivity.ActivityCode AS ActivityCode,\n    ExtraCurricularActivity.ActivityName AS ActivityName,\n    ExtraCurricularActivity.ActivityDescription AS ActivityDescription,\n    ExtraCurricularActivity.GradeLevel AS ExtraCurricularGradeLevel,\n    ExtraCurricularActivity.NumberOfYearsAfterHs AS ExtracurricularNumberOfYearsAfterHs,\n    ExtraCurricularActivity.WeeklyHours AS WeeklyHours,\n    ExtraCurricularActivity.YearlyWeeks AS YearlyWeeks,\n    ExtraCurricularActivity.NoteMessage AS NoteMessage,\n    ExtraCurricularActivity.OrganizationDescription AS OrganizationDescription,\n    ApplicationDetail.ApplicationSession.SessionName AS SessionName,\n    CAST(ApplicationDetail.ApplicationSession.SessionSchoolYear AS int) AS SessionSchoolYear,\n    TO_DATE(ApplicationDetail.ApplicationReceivedDate, 'yyyy-MM-dd') AS ApplicationReceivedDate,\n    TO_DATE(ApplicationDetail.WipDate, 'yyyy-MM-dd') AS WipDate,\n    ApplicationDetail.ApplicantAlert AS ApplicantAlert,\n    CampusAppliedDetail.CampusName AS CampusName,\n    TO_DATE(CampusAppliedDetail.SendToCampusDate, 'yyyy-MM-dd') AS SendToCampusDate,\n    ApplicationDegreeProgram.AcademicProgramCollege.CollegeCode AS CollegeCode,\n    ApplicationDegreeProgram.Preauthorized AS Preauthorized,\n    ApplicationDegreeProgram.AcademicProgramDetail.AcademicProgramType AS AcademicProgramType,\n    ApplicationDegreeProgram.AcademicProgramDetail.AcademicProgramName AS AcademicProgramName,\n    CampusAppliedDetail.ApplicationType AS ApplicationType,\n    CampusAppliedDetail.AdmitStatus AS AdmitStatus,\n    CampusAppliedDetail.SirStatus AS SirStatus,\n    CampusAppliedDetail.CanceledFlag AS CanceledFlag,\n    CampusAppliedDetail.CanceledCode AS CanceledCode,\n    CampusAppliedDetail.CanceledDate AS CanceledDate,\n    UCSDCampusPreference.UCSDCampus AS UCSDCampus,\n    CAST(UCSDCampusPreference.Preference AS int) AS Preference,\n    CampusAppliedDetail.WaitlistCode AS WaitlistCode,\n    EducationHistory.SchoolLastAttended AS SchoolLastAttended,\n    EducationHistory.MixedRecordIndicator AS MixedRecordIndicator,\n    EducationHistory.MixedRecordIndicatorUcap AS MixedRecordIndicatorUcap,\n    EducationHistory.MixedRecordCollegeIndicator AS MixedRecordCollegeIndicator,\n    EducationHistory.LanguageOfInstruction68.LanguageCode AS Lang68_LanguageCode,\n    EducationHistory.LanguageOfInstruction68.LanguageName AS Lang68_LanguageName,\n    EducationHistory.LanguageOfInstruction912.LanguageCode AS Lang912_LanguageCode,\n    EducationHistory.LanguageOfInstruction912.LanguageName AS Lang912_LanguageName,\n    EducationHistory.LanguageOfInstruction912NonEnglish AS LanguageOfInstruction912NonEnglish,\n    EducationHistory.GradingSystemUcap AS GradingSystemUcap,\n    EducationHistory.BreakInEducationFlag AS BreakInEducationFlag,\n    EducationHistory.BreakInEducationDescription AS BreakInEducationDescription,\n    EducationHistory.TransferSummaryApplicant.TransferGpa AS TransferGpa,\n    EducationHistory.TransferSummaryApplicant.TransferQtrUnits AS TransferQtrUnits,\n    EducationHistory.TransferSummaryApplicant.TransferSemUnits AS TransferSemUnits,\n    EducationHistory.TransferSummaryApplicant.IgetcCompletedFlag AS IgetcCompletedFlag,\n    EducationHistory.TransferSummaryApplicant.EnglishRequirementStatus AS EnglishRequirementStatus,\n    EducationHistory.TransferSummaryApplicant.MathRequirementStatus AS MathRequirementStatus,\n    EducationHistory.TransferSummaryApplicant.SubjectAreaRequirementStatus AS SubjectAreaRequirementStatus,\n    EducationHistory.TransferSummaryApplicant.BreakInEducationFlag AS TransferBreakInEducationFlag,\n    EducationHistory.TransferSummaryApplicant.BreakInEducationDescription AS TransferBreakInEducationDescription,\n    EducationHistory.TransferSummaryApplicant.EngCompTransCourseDept1 AS EngCompTransCourseDept1,\n    EducationHistory.TransferSummaryApplicant.EngCompTransCourseDept2 AS EngCompTransCourseDept2,\n    EducationHistory.TransferSummaryApplicant.EngCompTransCourseName1 AS EngCompTransCourseName1,\n    EducationHistory.TransferSummaryApplicant.EngCompTransCourseName2 AS EngCompTransCourseName2,\n    EducationHistory.TransferSummaryApplicant.EngCompTransCourseNumber1 AS EngCompTransCourseNumber1,\n    EducationHistory.TransferSummaryApplicant.EngCompTransCourseNumber2 AS EngCompTransCourseNumber2,\n    EducationHistory.TransferSummaryApplicant.MathTransCourseDept AS MathTransCourseDept,\n    EducationHistory.TransferSummaryApplicant.MathTransCourseName AS MathTransCourseName,\n    EducationHistory.TransferSummaryApplicant.MathTransCourseNumber AS MathTransCourseNumber,\n    EducationHistory.TransferSummaryApplicant.ProbationNonUc AS ProbationNonUc,\n    EducationHistory.TransferSummaryApplicant.ProbationNonUcCampusName AS ProbationNonUcCampusName,\n    EducationHistory.TransferSummaryApplicant.ProbationUc AS ProbationUc,\n    EducationHistory.TransferSummaryApplicant.ProbationUcCampusName AS ProbationUcCampusName,\n    EducationHistory.TransferSummaryApplicant.GeneralEducation AS GeneralEducation,\n    EducationHistory.TransferSummaryApplicant.ELWR AS ELWR,\n    EducationHistory.TransferSummaryApplicant.TransferPathwayMajor AS TransferPathwayMajor\nFROM\n    applicant"
-    }
-  }, {
-    "name" : "admissionsapplication_1",
-    "type" : "fileparquet",
-    "nodeType" : "sink",
-    "description" : "",
-    "properties" : {
-      "maxLinkAllowed" : 1,
-      "partitionBy" : "fileyear,filemonth,termcode",
-      "dependsOn" : [ "admissions_app_sql_1" ],
-      "icon" : "https://dev-api.datamorph.ai/iconslight/parquet.svg",
-      "batch" : true,
-      "format" : "parquet",
-      "extras" : "Parquet",
-      "label" : "admissionsapplication_1",
-      "path" : "${ADMISSIONS_APPLICATION_TABLE_PATH}",
-      "ui" : {
-        "x" : 825,
-        "y" : 630
-      },
-      "width" : 114,
-      "outputmode" : "append",
-      "style" : {
-        "backgroundColor" : "#4ABC97"
-      },
-      "position" : {
-        "x" : 909.2639419404125,
-        "y" : 594.5115226337448
-      },
-      "id" : "dndnode_0.9230343117098663",
-      "height" : 65
     }
   } ]
 }
