@@ -1,0 +1,220 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "Test react flow with schema processor",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "csv_1",
+    "type" : "filecsv",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "schema" : "",
+      "charset" : "",
+      "lineSep" : "",
+      "modifiedBefore" : "",
+      "select" : "*",
+      "enforceSchema" : true,
+      "dateFormat" : "",
+      "positiveInf" : "",
+      "multiLine" : false,
+      "distinct" : false,
+      "nanValue" : "",
+      "inferSchema" : false,
+      "locale" : "",
+      "maxColumns" : 20480,
+      "nullValue" : "",
+      "pathGlobFilter" : "",
+      "path" : "file:///${outputDir}/customerloan.delta",
+      "quote" : "",
+      "ui" : {
+        "x" : 154,
+        "y" : 146
+      },
+      "spark" : {
+        "sql" : {
+          "files" : {
+            "ignoreCorruptFiles" : false,
+            "ignoreMissingFiles" : false
+          }
+        }
+      },
+      "delimiter" : "",
+      "normalizeColumnNamesWithReplacement" : "",
+      "where" : "",
+      "extractFileName" : "",
+      "id" : "dndnode_0.6530658681596369",
+      "recursiveFileLookup" : false,
+      "escape" : "",
+      "ignoreTrailingWhiteSpace" : false,
+      "batch" : true,
+      "format" : "csv",
+      "negativeInf" : "",
+      "parserLib" : "",
+      "encoding" : "",
+      "samplingRatio" : 1,
+      "modifiedAfter" : "",
+      "ignoreLeadingWhiteSpace" : false,
+      "emptyValue" : "",
+      "charToEscapeQuoteEscaping" : "",
+      "header" : false,
+      "timestampFormat" : "",
+      "comment" : "",
+      "maxCharsPerColumn" : -1,
+      "columnNameOfCorruptRecord" : ""
+    }
+  }, {
+    "name" : "schema_1",
+    "type" : "schemaprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "outputTo" : "schemaDiff",
+      "dependsOn" : [ "csv_1" ],
+      "ui" : {
+        "x" : 308,
+        "y" : 146
+      },
+      "dataFormat" : "xml",
+      "schemaLocation" : "",
+      "batch" : true,
+      "existingSchema" : "",
+      "existingSchemaBaseDir" : "",
+      "id" : "dndnode_0.8095625678332716",
+      "inferSchema" : true,
+      "compatibility" : "MERGE_ALL_COLUMNS"
+    }
+  }, {
+    "name" : "json_1",
+    "type" : "filejson",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "path" : "s3://datamorph-qa/output/",
+      "select" : "*",
+      "dependsOn" : [ "schema_1_schemaDiff" ],
+      "ui" : {
+        "x" : 450,
+        "y" : 105
+      },
+      "batch" : true,
+      "format" : "json",
+      "id" : "dndnode_0.6144652317117254",
+      "ignoreNullFields" : false
+    }
+  }, {
+    "name" : "json_2",
+    "type" : "filejson",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "partitions" : "",
+      "partitionBy" : "",
+      "select" : "*",
+      "dependsOn" : [ "schema_1" ],
+      "dateFormat" : "",
+      "batch" : true,
+      "format" : "json",
+      "timeZone" : "",
+      "encoding" : "",
+      "ignoreNullFields" : false,
+      "path" : "s3://datamorph-qa/output/",
+      "ui" : {
+        "x" : 450,
+        "y" : 165
+      },
+      "timestampFormat" : "",
+      "id" : "dndnode_0.8769029015938195",
+      "compression" : ""
+    }
+  }, {
+    "name" : "fixed_width_2",
+    "type" : "filefixedwidth",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "schema" : "asdf",
+      "charset" : "",
+      "modifiedBefore" : "",
+      "select" : "*",
+      "footer" : 0,
+      "batch" : true,
+      "format" : "text",
+      "distinct" : false,
+      "pathGlobFilter" : "",
+      "modifiedAfter" : "",
+      "path" : "s3://datamorph-qa/output/",
+      "outputTo" : [ "OP1", "OP2" ],
+      "ui" : {
+        "x" : 195,
+        "y" : 255
+      },
+      "spark" : {
+        "sql" : {
+          "files" : {
+            "ignoreCorruptFiles" : false,
+            "ignoreMissingFiles" : false
+          }
+        }
+      },
+      "normalizeColumnNamesWithReplacement" : "",
+      "header" : 0,
+      "where" : "",
+      "extractFileName" : "",
+      "id" : "dndnode_0.027473964489149072",
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "json_3",
+    "type" : "filejson",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "partitions" : "",
+      "partitionBy" : "",
+      "select" : "*",
+      "dependsOn" : [ "fixed_width_2_OP1" ],
+      "dateFormat" : "",
+      "batch" : true,
+      "format" : "json",
+      "timeZone" : "",
+      "encoding" : "",
+      "ignoreNullFields" : false,
+      "path" : "s3://datamorph-qa/output/",
+      "ui" : {
+        "x" : 345,
+        "y" : 225
+      },
+      "timestampFormat" : "",
+      "id" : "dndnode_0.6554435180510989",
+      "compression" : ""
+    }
+  }, {
+    "name" : "json_4",
+    "type" : "filejson",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "partitions" : "",
+      "partitionBy" : "",
+      "select" : "*",
+      "dependsOn" : [ "fixed_width_2_OP2" ],
+      "dateFormat" : "",
+      "batch" : true,
+      "format" : "json",
+      "timeZone" : "",
+      "encoding" : "",
+      "ignoreNullFields" : false,
+      "path" : "s3://datamorph-qa/output/",
+      "ui" : {
+        "x" : 345,
+        "y" : 285
+      },
+      "timestampFormat" : "",
+      "id" : "dndnode_0.893642457213425",
+      "compression" : ""
+    }
+  } ]
+}
