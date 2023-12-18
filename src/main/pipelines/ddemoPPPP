@@ -1,0 +1,210 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "",
+    "tags" : [ {
+      "id" : 2,
+      "name" : "testNew",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656576269000,
+      "createdBy" : 1
+    }, {
+      "id" : 3,
+      "name" : "testAdd",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656577044000,
+      "createdBy" : 1
+    }, {
+      "id" : 1,
+      "name" : "test",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656485405000,
+      "createdBy" : 1
+    } ]
+  },
+  "workflow" : [ {
+    "name" : "kafka_3",
+    "type" : "kafka",
+    "nodeType" : "source",
+    "description" : "test",
+    "properties" : {
+      "kafka.client.dns.lookup" : "${CONNECTION__ID__XXX.kafka.client.dns.lookup}",
+      "dependsOn" : [ ],
+      "fetchOffset.numRetries" : 3,
+      "subscribe" : "testSub123",
+      "basic.auth.credentials.source" : "${CONNECTION__ID__XXX.basic.auth.credentials.source}",
+      "kafka.security.protocol" : "${CONNECTION__ID__XXX.kafka.security.protocol}",
+      "batch" : false,
+      "format" : "kafka",
+      "fetchOffset.retryIntervalMs" : 10,
+      "includeHeaders" : false,
+      "failOnDataLoss" : true,
+      "schema.registry.url" : "${CONNECTION__ID__XXX.schema.registry.url}",
+      "basic.auth.user.info" : "${CONNECTION__ID__XXX.basic.auth.user.info}",
+      "kafka.bootstrap.servers" : "${CONNECTION__ID__XXX.kafka.bootstrap.servers}",
+      "ui" : {
+        "x" : 645,
+        "y" : 75
+      },
+      "kafkaConsumer.pollTimeoutMs" : 512,
+      "kafka.sasl.mechanism" : "${CONNECTION__ID__XXX.kafka.sasl.mechanism}",
+      "kafka.sasl.jaas.config" : "${CONNECTION__ID__XXX.kafka.sasl.jaas.config}",
+      "connection" : 33,
+      "connectionName" : "clickstream_demo_kafka",
+      "id" : "dndnode_0.9731202754202146"
+    }
+  }, {
+    "name" : "kafka_1",
+    "type" : "kafka",
+    "nodeType" : "source",
+    "description" : "test",
+    "properties" : {
+      "kafka.client.dns.lookup" : "${CONNECTION__ID__XXX.kafka.client.dns.lookup}",
+      "dependsOn" : [ ],
+      "fetchOffset.numRetries" : 3,
+      "basic.auth.credentials.source" : "${CONNECTION__ID__XXX.basic.auth.credentials.source}",
+      "kafka.security.protocol" : "${CONNECTION__ID__XXX.kafka.security.protocol}",
+      "batch" : false,
+      "format" : "kafka",
+      "fetchOffset.retryIntervalMs" : 10,
+      "includeHeaders" : false,
+      "failOnDataLoss" : false,
+      "schema.registry.url" : "${CONNECTION__ID__XXX.schema.registry.url}",
+      "basic.auth.user.info" : "${CONNECTION__ID__XXX.basic.auth.user.info}",
+      "kafka.bootstrap.servers" : "${CONNECTION__ID__XXX.kafka.bootstrap.servers}",
+      "ui" : {
+        "x" : 645,
+        "y" : 210
+      },
+      "kafkaConsumer.pollTimeoutMs" : 512,
+      "kafka.sasl.mechanism" : "${CONNECTION__ID__XXX.kafka.sasl.mechanism}",
+      "kafka.sasl.jaas.config" : "${CONNECTION__ID__XXX.kafka.sasl.jaas.config}",
+      "connection" : 33,
+      "connectionName" : "clickstream_demo_kafka",
+      "id" : "dndnode_0.7489558804794822",
+      "assign" : "testAssign"
+    }
+  }, {
+    "name" : "kafka_2",
+    "type" : "kafka",
+    "nodeType" : "source",
+    "description" : "testi",
+    "properties" : {
+      "kafka.client.dns.lookup" : "${CONNECTION__ID__XXX.kafka.client.dns.lookup}",
+      "dependsOn" : [ ],
+      "fetchOffset.numRetries" : 3,
+      "basic.auth.credentials.source" : "${CONNECTION__ID__XXX.basic.auth.credentials.source}",
+      "kafka.security.protocol" : "${CONNECTION__ID__XXX.kafka.security.protocol}",
+      "batch" : false,
+      "format" : "kafka",
+      "fetchOffset.retryIntervalMs" : 10,
+      "includeHeaders" : false,
+      "failOnDataLoss" : false,
+      "schema.registry.url" : "${CONNECTION__ID__XXX.schema.registry.url}",
+      "basic.auth.user.info" : "${CONNECTION__ID__XXX.basic.auth.user.info}",
+      "subscribePattern" : "testSub",
+      "kafka.bootstrap.servers" : "${CONNECTION__ID__XXX.kafka.bootstrap.servers}",
+      "ui" : {
+        "x" : 840,
+        "y" : 195
+      },
+      "kafkaConsumer.pollTimeoutMs" : 512,
+      "kafka.sasl.mechanism" : "${CONNECTION__ID__XXX.kafka.sasl.mechanism}",
+      "kafka.sasl.jaas.config" : "${CONNECTION__ID__XXX.kafka.sasl.jaas.config}",
+      "connection" : 33,
+      "connectionName" : "clickstream_demo_kafka",
+      "id" : "dndnode_0.4877773835985548"
+    }
+  }, {
+    "name" : "jdbc_1",
+    "type" : "jdbc",
+    "nodeType" : "source",
+    "description" : "demo",
+    "properties" : {
+      "queryTimeout" : 0,
+      "select" : "*",
+      "dependsOn" : [ ],
+      "format" : "jdbc",
+      "distinct" : false,
+      "pushDownPredicate" : true,
+      "dbtable" : "DemoTBL",
+      "url" : "${CONNECTION__ID__XXX.url}",
+      "password" : "${CONNECTION__ID__XXX.password}",
+      "driver" : "${CONNECTION__ID__XXX.driver}",
+      "ui" : {
+        "x" : 795,
+        "y" : 75
+      },
+      "numPartitions" : 0,
+      "fetchsize" : 0,
+      "connection" : 36,
+      "connectionName" : "dev-jdbc1",
+      "id" : "dndnode_0.16801539237485819",
+      "user" : "${CONNECTION__ID__XXX.user}"
+    }
+  }, {
+    "name" : "jdbc_2",
+    "type" : "jdbc",
+    "nodeType" : "source",
+    "description" : "test",
+    "properties" : {
+      "queryTimeout" : 0,
+      "select" : "*",
+      "dependsOn" : [ ],
+      "query" : "select * from all",
+      "format" : "jdbc",
+      "distinct" : false,
+      "pushDownPredicate" : true,
+      "url" : "${CONNECTION__ID__XXX.url}",
+      "password" : "${CONNECTION__ID__XXX.password}",
+      "driver" : "${CONNECTION__ID__XXX.driver}",
+      "ui" : {
+        "x" : 975,
+        "y" : 90
+      },
+      "numPartitions" : 0,
+      "fetchsize" : 0,
+      "connection" : 36,
+      "connectionName" : "dev-jdbc1",
+      "id" : "dndnode_0.3118982989637369",
+      "user" : "${CONNECTION__ID__XXX.user}"
+    }
+  }, {
+    "name" : "snowflake_1",
+    "type" : "snowflake",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "keep_column_case" : "on",
+      "autopushdown" : "off",
+      "pem_private_key" : "${CONNECTION__ID__XXX.pem_private_key}",
+      "select" : "*",
+      "dependsOn" : [ ],
+      "format" : "net.snowflake.spark.snowflake",
+      "sfPassword" : "${CONNECTION__ID__XXX.sfPassword}",
+      "distinct" : false,
+      "dbtable" : "sas",
+      "sfDatabase" : "test",
+      "sfCompress" : "on",
+      "partition_size_in_mb" : 100,
+      "ui" : {
+        "x" : 345,
+        "y" : 240
+      },
+      "use_copy_unload" : true,
+      "sfUrl" : "${CONNECTION__ID__XXX.sfUrl}",
+      "connection" : 46,
+      "connectionName" : "snowflake_1",
+      "usestagingtable" : "on",
+      "id" : "dndnode_0.6867185647196001",
+      "sfAuthenticator" : "${CONNECTION__ID__XXX.sfAuthenticator}",
+      "sfSchema" : "sadsdadsda",
+      "sfUser" : "${CONNECTION__ID__XXX.sfUser}",
+      "continue_on_error" : "off"
+    }
+  } ]
+}
