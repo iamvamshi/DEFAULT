@@ -1,0 +1,142 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "This pipelines includes frequently used sources, processors and sinks. This pipeline job to be run  before each upgrade/feature addition to check all the nodes are working as expected without errors. WIP",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "parameters",
+    "type" : "parameter",
+    "nodeType" : "parameter",
+    "description" : "",
+    "properties" : {
+      "DELTA_OUTPUT" : "s3://datamorph-dev/output/regressiontest/test1"
+    }
+  }, {
+    "name" : "csv_1",
+    "type" : "filecsv",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "ignoreTrailingWhiteSpace" : false,
+      "designSchema" : 178,
+      "enforceSchema" : true,
+      "multiLine" : false,
+      "batch" : true,
+      "format" : "csv",
+      "inferSchema" : false,
+      "samplingRatio" : 1,
+      "maxColumns" : 20480,
+      "path" : "s3://datamorph-dev/datasets/customer_loan/loan/customer-loan.csv",
+      "ignoreLeadingWhiteSpace" : false,
+      "ui" : {
+        "x" : 25,
+        "y" : 25
+      },
+      "normalizeColumnNamesWithReplacement" : "_",
+      "header" : true,
+      "extractFileName" : "datamorph_ingest_filename",
+      "maxCharsPerColumn" : -1,
+      "id" : "a0828c79-c219-401e-9038-b1acdb99d589",
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "add_columns_1",
+    "type" : "addcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "addColumns" : [ {
+        "name" : "ingestionDate",
+        "properties" : {
+          "columns" : [ "ingestionDate" ],
+          "transformType" : "current_date()",
+          "sql" : "current_date()"
+        }
+      } ],
+      "dependsOn" : [ "csv_1" ],
+      "ui" : {
+        "x" : 175,
+        "y" : 25
+      },
+      "id" : "d6004d2a-8bd5-48fa-a643-8edf9cc2eab2"
+    }
+  }, {
+    "name" : "drop_columns_1",
+    "type" : "dropcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dropColumns" : "web,\nphone2",
+      "dependsOn" : [ "add_columns_1" ],
+      "ui" : {
+        "x" : 325,
+        "y" : 25
+      },
+      "dropColumnIfAllNull" : false,
+      "id" : "961be050-86fc-4e4d-926f-bb3a25c70747"
+    }
+  }, {
+    "name" : "rename_columns_1",
+    "type" : "renamecolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "drop_columns_1" ],
+      "ui" : {
+        "x" : 475,
+        "y" : 25
+      },
+      "renameColumns" : [ {
+        "name" : "rename",
+        "properties" : {
+          "inputColumns" : [ "datamorph_ingest_filename" ],
+          "renameWith" : [ "filename" ]
+        }
+      } ],
+      "id" : "913ff1b6-f732-42b4-bdce-7aa07619ad02"
+    }
+  }, {
+    "name" : "transform_columns_1",
+    "type" : "transformcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "rename_columns_1" ],
+      "ui" : {
+        "x" : 625,
+        "y" : 25
+      },
+      "transforms" : [ {
+        "name" : "dateformat",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "state" ],
+          "transformType" : "upper(col)",
+          "sql" : "upper($self)"
+        }
+      } ],
+      "id" : "e0afd2e3-0e44-4cb9-af9c-0e7e2aae4085"
+    }
+  }, {
+    "name" : "delta_2",
+    "type" : "delta",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "mode" : "Overwrite",
+      "path" : "${DELTA_OUTPUT}",
+      "dependsOn" : [ "transform_columns_1" ],
+      "ui" : {
+        "x" : 805,
+        "y" : 28
+      },
+      "batch" : true,
+      "format" : "delta",
+      "overwriteSchema" : false,
+      "id" : "4082aaeb-6394-4e5b-bf86-8f1f978e7740",
+      "mergeSchema" : false
+    }
+  } ]
+}
