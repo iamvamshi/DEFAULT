@@ -6,38 +6,21 @@
     "tags" : [ ]
   },
   "workflow" : [ {
-    "name" : "nature_of_injury_lkup",
+    "name" : "loc_lkup",
     "type" : "table",
     "nodeType" : "source",
-    "description" : "Claims Injury Lookup Table",
+    "description" : "Claims Location Lookup Table",
     "properties" : {
-      "designSchema" : 76,
+      "designSchema" : 62,
       "dependsOn" : [ ],
       "ui" : {
-        "x" : 1054,
-        "y" : 515
+        "x" : 274,
+        "y" : 541
       },
       "format" : "table",
       "distinct" : false,
-      "id" : "603c6545-369c-422f-88f7-9091675770ad",
-      "table" : "erm_reporting.nature_of_injury_lkup"
-    }
-  }, {
-    "name" : "sedwick_wc_monthly",
-    "type" : "table",
-    "nodeType" : "source",
-    "description" : "",
-    "properties" : {
-      "designSchema" : 52,
-      "dependsOn" : [ ],
-      "ui" : {
-        "x" : -224,
-        "y" : 254
-      },
-      "format" : "table",
-      "distinct" : false,
-      "id" : "63e5a968-be72-4a41-99f0-11160e6f587c",
-      "table" : "incoming.sedwick_wc_monthly"
+      "id" : "d0af6a0c-18cb-46bb-882d-01217ce72a86",
+      "table" : "erm_reporting.loc_lkup"
     }
   }, {
     "name" : "sedwick_wc_daily",
@@ -55,6 +38,23 @@
       "distinct" : false,
       "id" : "8f35d3ce-09ad-4159-b40e-be084e365f5a",
       "table" : "incoming.sedwick_wc_daily"
+    }
+  }, {
+    "name" : "sedwick_wc_monthly",
+    "type" : "table",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "designSchema" : 52,
+      "dependsOn" : [ ],
+      "ui" : {
+        "x" : -224,
+        "y" : 254
+      },
+      "format" : "table",
+      "distinct" : false,
+      "id" : "63e5a968-be72-4a41-99f0-11160e6f587c",
+      "table" : "incoming.sedwick_wc_monthly"
     }
   }, {
     "name" : "incoming_sedgwick_wc",
@@ -191,23 +191,6 @@
         }
       } ],
       "id" : "62dd023a-00a7-4f43-b231-acc473e2401e"
-    }
-  }, {
-    "name" : "loc_lkup",
-    "type" : "table",
-    "nodeType" : "source",
-    "description" : "Claims Location Lookup Table",
-    "properties" : {
-      "designSchema" : 62,
-      "dependsOn" : [ ],
-      "ui" : {
-        "x" : 274,
-        "y" : 541
-      },
-      "format" : "table",
-      "distinct" : false,
-      "id" : "d0af6a0c-18cb-46bb-882d-01217ce72a86",
-      "table" : "erm_reporting.loc_lkup"
     }
   }, {
     "name" : "sedgwick_wc_location_rule",
@@ -539,6 +522,23 @@
         "y" : 254
       },
       "id" : "a18b143f-dda3-4d96-adcb-f036bbf79a73"
+    }
+  }, {
+    "name" : "nature_of_injury_lkup",
+    "type" : "table",
+    "nodeType" : "source",
+    "description" : "Claims Injury Lookup Table",
+    "properties" : {
+      "designSchema" : 76,
+      "dependsOn" : [ ],
+      "ui" : {
+        "x" : 1054,
+        "y" : 515
+      },
+      "format" : "table",
+      "distinct" : false,
+      "id" : "603c6545-369c-422f-88f7-9091675770ad",
+      "table" : "erm_reporting.nature_of_injury_lkup"
     }
   }, {
     "name" : "sedgwick_wc_osha_rule",
