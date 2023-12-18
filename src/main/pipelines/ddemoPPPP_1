@@ -4,13 +4,6 @@
     "origin" : "",
     "description" : "",
     "tags" : [ {
-      "id" : 1,
-      "name" : "test",
-      "type" : "DEFAULT",
-      "description" : null,
-      "createdDate" : 1656485405000,
-      "createdBy" : 1
-    }, {
       "id" : 4,
       "name" : "pipelineTestTag",
       "type" : "DEFAULT",
@@ -30,6 +23,13 @@
       "type" : "DEFAULT",
       "description" : null,
       "createdDate" : 1656576269000,
+      "createdBy" : 1
+    }, {
+      "id" : 1,
+      "name" : "test",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656485405000,
       "createdBy" : 1
     } ]
   },
