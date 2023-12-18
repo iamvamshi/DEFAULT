@@ -6,29 +6,6 @@
     "tags" : [ ]
   },
   "workflow" : [ {
-    "name" : "workflowParameters",
-    "type" : "workflowParameter",
-    "nodeType" : "workflowParameter",
-    "description" : "",
-    "properties" : {
-      "valid_daily_column_count" : "144",
-      "monthly_rows_min_threshold" : "1200",
-      "subject" : "Sedgwick WC Workflow",
-      "daily_rows_min_threshold" : "1000",
-      "monthly_file_arrival_day" : "4",
-      "to_address" : "DmsRlExport@ucop.edu",
-      "valid_monthly_column_count" : "144",
-      "from_address" : "rdms-etl@sdsc.edu"
-    }
-  }, {
-    "name" : "parameters",
-    "type" : "parameter",
-    "nodeType" : "parameter",
-    "description" : "",
-    "properties" : {
-      "env" : "dev"
-    }
-  }, {
     "name" : "action_trigger_1",
     "type" : "datamorphairflow.actions.empty.DMEmptyOperator",
     "nodeType" : "trigger",
@@ -69,8 +46,8 @@
       "dependsOn" : [ "pre_process:Success" ],
       "retry_delay" : 0,
       "ui" : {
-        "x" : 315,
-        "y" : 0
+        "x" : 292,
+        "y" : 26
       },
       "trigger_rule" : "all_success",
       "id" : "13f859ba-7de9-4a5c-8f13-b0f29f7e9bf2",
@@ -306,13 +283,36 @@
       "dependsOn" : [ "branch:error", "branch:stop", "branch:warning" ],
       "retry_delay" : 0,
       "ui" : {
-        "x" : 705,
-        "y" : 45
+        "x" : 495,
+        "y" : 30
       },
       "jarPath" : "s3://rdms-${env}-app-bucket/etl/lib/rdms-sdk-1.1.jar",
       "trigger_rule" : "all_success",
       "className" : "edu.ucop.process.PostProcessSedgwickWC",
       "id" : "9f2997ec-d95a-440d-a3d3-8d3fb51b9845"
+    }
+  }, {
+    "name" : "parameters",
+    "type" : "parameter",
+    "nodeType" : "parameter",
+    "description" : "",
+    "properties" : {
+      "env" : "dev"
+    }
+  }, {
+    "name" : "workflowParameters",
+    "type" : "workflowParameter",
+    "nodeType" : "workflowParameter",
+    "description" : "",
+    "properties" : {
+      "valid_daily_column_count" : "144",
+      "monthly_rows_min_threshold" : "1200",
+      "subject" : "Sedgwick WC Workflow",
+      "daily_rows_min_threshold" : "1000",
+      "monthly_file_arrival_day" : "4",
+      "to_address" : "DmsRlExport@ucop.edu",
+      "valid_monthly_column_count" : "144",
+      "from_address" : "rdms-etl@sdsc.edu"
     }
   } ]
 }
