@@ -4,6 +4,13 @@
     "origin" : "",
     "description" : "demo description",
     "tags" : [ {
+      "id" : 299,
+      "name" : "testData",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1662960127000,
+      "createdBy" : 31
+    }, {
       "id" : 625,
       "name" : "workflowTag",
       "type" : "DEFAULT",
@@ -16,13 +23,6 @@
       "type" : "DEFAULT",
       "description" : null,
       "createdDate" : 1662959868000,
-      "createdBy" : 31
-    }, {
-      "id" : 299,
-      "name" : "testData",
-      "type" : "DEFAULT",
-      "description" : null,
-      "createdDate" : 1662960127000,
       "createdBy" : 31
     } ]
   },
