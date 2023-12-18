@@ -15,93 +15,6 @@
       "delta" : "paramValue"
     }
   }, {
-    "name" : "csv_1",
-    "type" : "filecsv",
-    "nodeType" : "source",
-    "description" : "",
-    "properties" : {
-      "ignoreTrailingWhiteSpace" : false,
-      "select" : "*",
-      "enforceSchema" : true,
-      "dependsOn" : [ ],
-      "multiLine" : false,
-      "batch" : true,
-      "format" : "csv",
-      "distinct" : false,
-      "inferSchema" : false,
-      "maxColumns" : 20480,
-      "samplingRatio" : 1,
-      "path" : "s3://datamorph-dev/datasets/customer_loan/customer-loan.csv",
-      "ignoreLeadingWhiteSpace" : false,
-      "ui" : {
-        "x" : 90,
-        "y" : 135
-      },
-      "spark" : {
-        "sql" : {
-          "files" : {
-            "ignoreCorruptFiles" : false,
-            "ignoreMissingFiles" : false
-          }
-        }
-      },
-      "header" : false,
-      "maxCharsPerColumn" : -1,
-      "id" : "dndnode_0.7822897438075591",
-      "recursiveFileLookup" : false
-    }
-  }, {
-    "name" : "add_columns_1",
-    "type" : "addcolumnsprocessor",
-    "nodeType" : "processor",
-    "description" : "",
-    "properties" : {
-      "dependsOn" : [ "csv_1" ],
-      "addColumns" : [ {
-        "name" : "test",
-        "properties" : {
-          "columns" : [ "col" ],
-          "transformType" : "ascii(col)",
-          "sql" : "ascii({col})"
-        }
-      }, {
-        "name" : "test_1",
-        "properties" : {
-          "columns" : [ "col" ],
-          "transformType" : "ascii(col)",
-          "sql" : "ascii({col})"
-        }
-      } ],
-      "ui" : {
-        "x" : 255,
-        "y" : 135
-      },
-      "id" : "dndnode_0.7656332773623669"
-    }
-  }, {
-    "name" : "csv_2",
-    "type" : "filecsv",
-    "nodeType" : "sink",
-    "description" : "",
-    "properties" : {
-      "ignoreTrailingWhiteSpace" : true,
-      "select" : "*",
-      "dependsOn" : [ "add_columns_1" ],
-      "escapeQuotes" : true,
-      "batch" : true,
-      "format" : "csv",
-      "mode" : "Overwrite",
-      "path" : "path",
-      "ignoreLeadingWhiteSpace" : true,
-      "ui" : {
-        "x" : 420,
-        "y" : 135
-      },
-      "header" : false,
-      "id" : "dndnode_0.8375162902009341",
-      "quoteAll" : false
-    }
-  }, {
     "name" : "xml_data_1",
     "type" : "filexml",
     "nodeType" : "source",
@@ -265,6 +178,93 @@
       "outputmode" : "Append",
       "id" : "dndnode_0.48156596969082077",
       "mergeSchema" : true
+    }
+  }, {
+    "name" : "csv_1",
+    "type" : "filecsv",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "ignoreTrailingWhiteSpace" : false,
+      "select" : "*",
+      "enforceSchema" : true,
+      "dependsOn" : [ ],
+      "multiLine" : false,
+      "batch" : true,
+      "format" : "csv",
+      "distinct" : false,
+      "inferSchema" : false,
+      "maxColumns" : 20480,
+      "samplingRatio" : 1,
+      "path" : "s3://datamorph-dev/datasets/customer_loan/customer-loan.csv",
+      "ignoreLeadingWhiteSpace" : false,
+      "ui" : {
+        "x" : 90,
+        "y" : 135
+      },
+      "spark" : {
+        "sql" : {
+          "files" : {
+            "ignoreCorruptFiles" : false,
+            "ignoreMissingFiles" : false
+          }
+        }
+      },
+      "header" : false,
+      "maxCharsPerColumn" : -1,
+      "id" : "dndnode_0.7822897438075591",
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "add_columns_1",
+    "type" : "addcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "csv_1" ],
+      "addColumns" : [ {
+        "name" : "test",
+        "properties" : {
+          "columns" : [ "col" ],
+          "transformType" : "ascii(col)",
+          "sql" : "ascii({col})"
+        }
+      }, {
+        "name" : "test_1",
+        "properties" : {
+          "columns" : [ "col" ],
+          "transformType" : "ascii(col)",
+          "sql" : "ascii({col})"
+        }
+      } ],
+      "ui" : {
+        "x" : 255,
+        "y" : 135
+      },
+      "id" : "dndnode_0.7656332773623669"
+    }
+  }, {
+    "name" : "csv_2",
+    "type" : "filecsv",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "ignoreTrailingWhiteSpace" : true,
+      "select" : "*",
+      "dependsOn" : [ "add_columns_1" ],
+      "escapeQuotes" : true,
+      "batch" : true,
+      "format" : "csv",
+      "mode" : "Overwrite",
+      "path" : "path",
+      "ignoreLeadingWhiteSpace" : true,
+      "ui" : {
+        "x" : 420,
+        "y" : 135
+      },
+      "header" : false,
+      "id" : "dndnode_0.8375162902009341",
+      "quoteAll" : false
     }
   } ]
 }
