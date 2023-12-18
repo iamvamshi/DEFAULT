@@ -1,0 +1,171 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "",
+    "tags" : [ {
+      "id" : 3,
+      "name" : "testAdd",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656577044000,
+      "createdBy" : 1
+    }, {
+      "id" : 2,
+      "name" : "testNew",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656576269000,
+      "createdBy" : 1
+    }, {
+      "id" : 1,
+      "name" : "test",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656485405000,
+      "createdBy" : 1
+    } ]
+  },
+  "workflow" : [ {
+    "name" : "csv_1",
+    "type" : "filecsv",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "ignoreTrailingWhiteSpace" : false,
+      "select" : "*",
+      "enforceSchema" : true,
+      "dependsOn" : [ ],
+      "spark.sql.files.ignoreCorruptFiles" : false,
+      "multiLine" : false,
+      "batch" : true,
+      "format" : "csv",
+      "distinct" : false,
+      "inferSchema" : false,
+      "samplingRatio" : 1,
+      "maxColumns" : 20480,
+      "path" : "s3a://datamorph-dev/datasets/customer_loan/customer-loan.csv",
+      "ignoreLeadingWhiteSpace" : false,
+      "spark.sql.files.ignoreMissingFiles" : false,
+      "ui" : {
+        "x" : 25,
+        "y" : 25
+      },
+      "spark" : {
+        "sql" : {
+          "files" : {
+            "ignoreCorruptFiles" : false,
+            "ignoreMissingFiles" : false
+          }
+        }
+      },
+      "header" : true,
+      "maxCharsPerColumn" : -1,
+      "id" : "eb479786-db12-4508-94d1-3900c9bf1f21",
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "sql_1",
+    "type" : "sql",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "csv_1" ],
+      "ui" : {
+        "x" : 175,
+        "y" : 25
+      },
+      "id" : "25c0d90a-9654-4362-8f92-2bcd2da79a9e",
+      "sql" : "select * from csv_1"
+    }
+  }, {
+    "name" : "drop_columns_1",
+    "type" : "dropcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dropColumns" : "test$",
+      "dependsOn" : [ "sql_1" ],
+      "ui" : {
+        "x" : 330,
+        "y" : 29
+      },
+      "dropColumnIfAllNull" : false,
+      "id" : "5ac5c8f9-8ade-4dc6-8976-20a4aa1fdf4b"
+    }
+  }, {
+    "name" : "transform_columns_1",
+    "type" : "transformcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "drop_columns_1" ],
+      "ui" : {
+        "x" : 495,
+        "y" : 90
+      },
+      "transforms" : [ {
+        "name" : "test1",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "city" ],
+          "transformType" : "ucase(col)",
+          "sql" : "ucase({col})",
+          "dependsOn" : "transform_columns_1"
+        }
+      }, {
+        "name" : "test2",
+        "description" : "Demo Description",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "demo" ],
+          "transformType" : "ascii(col)",
+          "sql" : "ascii({col})",
+          "dependsOn" : "transform_columns_1"
+        }
+      } ],
+      "id" : "13d4db40-e732-4356-ac41-c6a957c80724"
+    }
+  }, {
+    "name" : "add_columns_1",
+    "type" : "addcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "addColumns" : [ {
+        "name" : "test1",
+        "properties" : {
+          "inputColumns" : [ "test" ],
+          "columns" : [ "newcol" ],
+          "transformType" : "ucase(col)",
+          "sql" : "ucase({$self})"
+        }
+      } ],
+      "dependsOn" : [ "transform_columns_1" ],
+      "ui" : {
+        "x" : 660,
+        "y" : 45
+      },
+      "id" : "027f62d3-f6e5-4db0-8ee5-e483214cfefe"
+    }
+  }, {
+    "name" : "json_1",
+    "type" : "filejson",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "mode" : "Overwrite",
+      "path" : "s3://datamorph-dev/output/testeception/one",
+      "select" : "*",
+      "dependsOn" : [ "add_columns_1" ],
+      "ui" : {
+        "x" : 795,
+        "y" : 45
+      },
+      "batch" : true,
+      "format" : "json",
+      "id" : "169bd3a7-2a17-4e68-9b70-0c8219f95228",
+      "ignoreNullFields" : false
+    }
+  } ]
+}
