@@ -14,6 +14,40 @@
       "delta" : "paramValue"
     }
   }, {
+    "name" : "jdbc_1",
+    "type" : "jdbc",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "queryTimeout" : 0,
+      "select" : "*",
+      "dependsOn" : [ ],
+      "upperBound" : "",
+      "format" : "jdbc",
+      "distinct" : false,
+      "pushDownPredicate" : true,
+      "dbtable" : "tesst",
+      "url" : "${CONNECTION__ID__XXX.url}",
+      "password" : "${CONNECTION__ID__XXX.password}",
+      "driver" : "${CONNECTION__ID__XXX.driver}",
+      "ui" : {
+        "x" : 45,
+        "y" : 240
+      },
+      "normalizeColumnNamesWithReplacement" : "",
+      "numPartitions" : 0,
+      "fetchsize" : 0,
+      "partitionColumn" : "",
+      "connection" : 27,
+      "where" : "",
+      "lowerBound" : "",
+      "customSchema" : "",
+      "connectionName" : "jdbc_connection",
+      "id" : "dndnode_0.8011033099068876",
+      "user" : "${CONNECTION__ID__XXX.user}",
+      "sessionInitStatement" : ""
+    }
+  }, {
     "name" : "avro_1",
     "type" : "fileavro",
     "nodeType" : "source",
@@ -126,40 +160,6 @@
       "forward_spark_s3_credentials" : "${CONNECTION__ID__XXX.forward_spark_s3_credentials}",
       "temporary_aws_access_key_id" : "${CONNECTION__ID__XXX.temporary_aws_access_key_id}",
       "distkey" : ""
-    }
-  }, {
-    "name" : "jdbc_1",
-    "type" : "jdbc",
-    "nodeType" : "source",
-    "description" : "",
-    "properties" : {
-      "queryTimeout" : 0,
-      "select" : "*",
-      "dependsOn" : [ ],
-      "upperBound" : "",
-      "format" : "jdbc",
-      "distinct" : false,
-      "pushDownPredicate" : true,
-      "dbtable" : "tesst",
-      "url" : "${CONNECTION__ID__XXX.url}",
-      "password" : "${CONNECTION__ID__XXX.password}",
-      "driver" : "${CONNECTION__ID__XXX.driver}",
-      "ui" : {
-        "x" : 45,
-        "y" : 240
-      },
-      "normalizeColumnNamesWithReplacement" : "",
-      "numPartitions" : 0,
-      "fetchsize" : 0,
-      "partitionColumn" : "",
-      "connection" : 27,
-      "where" : "",
-      "lowerBound" : "",
-      "customSchema" : "",
-      "connectionName" : "jdbc_connection",
-      "id" : "dndnode_0.8011033099068876",
-      "user" : "${CONNECTION__ID__XXX.user}",
-      "sessionInitStatement" : ""
     }
   } ]
 }
