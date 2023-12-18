@@ -1,0 +1,79 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "snowflake_1",
+    "type" : "snowflake",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "keep_column_case" : false,
+      "autopushdown" : false,
+      "pem_private_key" : "${CONNECTION__ID__XXX.pem_private_key}",
+      "select" : "*",
+      "dependsOn" : [ ],
+      "format" : "net.snowflake.spark.snowflake",
+      "sfPassword" : "${CONNECTION__ID__XXX.sfPassword}",
+      "distinct" : false,
+      "dbtable" : "customer_loan",
+      "sfDatabase" : "datmorph_dev",
+      "sfCompress" : false,
+      "partition_size_in_mb" : 100,
+      "ui" : {
+        "x" : 375,
+        "y" : 195
+      },
+      "use_copy_unload" : false,
+      "sfUrl" : "${CONNECTION__ID__XXX.sfUrl}",
+      "connection" : 48,
+      "connectionName" : "snowflake_conn",
+      "usestagingtable" : false,
+      "id" : "dndnode_0.5920433605589679",
+      "sfAuthenticator" : "${CONNECTION__ID__XXX.sfAuthenticator}",
+      "sfSchema" : "customer_schema",
+      "sfUser" : "${CONNECTION__ID__XXX.sfUser}",
+      "continue_on_error" : false
+    }
+  }, {
+    "name" : "sql_1",
+    "type" : "sql",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "snowflake_1" ],
+      "ui" : {
+        "x" : 615,
+        "y" : 135
+      },
+      "id" : "dndnode_0.682787405519286",
+      "sql" : "select * from snowflake_1 limit 5"
+    }
+  }, {
+    "name" : "csv_1",
+    "type" : "filecsv",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "ignoreTrailingWhiteSpace" : true,
+      "select" : "*",
+      "dependsOn" : [ "sql_1" ],
+      "escapeQuotes" : true,
+      "batch" : true,
+      "format" : "csv",
+      "mode" : "Overwrite",
+      "ignoreLeadingWhiteSpace" : true,
+      "path" : "s3://datamorph-dev/output/snowflake",
+      "ui" : {
+        "x" : 795,
+        "y" : 135
+      },
+      "header" : true,
+      "id" : "dndnode_0.7592392909256247",
+      "quoteAll" : false
+    }
+  } ]
+}
