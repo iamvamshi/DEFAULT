@@ -36,10 +36,10 @@
         "name" : "success",
         "properties" : {
           "match_expression" : "TRUE",
-          "branch" : [ "email_1" ]
+          "branch" : [ "email_3" ]
         }
       }, {
-        "name" : "failure",
+        "name" : "failureEdit",
         "properties" : {
           "match_expression" : "FALSE",
           "branch" : [ "email_3" ]
@@ -80,11 +80,11 @@
       "html_content" : "dsdfsfds",
       "from_id" : "test@gmail.com",
       "bcc" : "",
-      "dependsOn" : [ "branch_1:failure" ],
+      "dependsOn" : [ "branch_1:failure", "branch_1:failureEdit" ],
       "retry_delay" : 0,
       "ui" : {
         "x" : 390,
-        "y" : 165
+        "y" : 150
       },
       "subject" : "q",
       "to" : "test1@gmail.com",
@@ -102,15 +102,31 @@
       "html_content" : "dsadasdass",
       "from_id" : "testNew",
       "bcc" : "",
-      "dependsOn" : [ "branch_1:failure" ],
+      "dependsOn" : [ "branch_1:failure", "branch_1:failureEdit", "branch_1:success" ],
       "retry_delay" : 0,
       "ui" : {
         "x" : 390,
-        "y" : 285
+        "y" : 255
       },
       "subject" : "dsdsd",
       "to" : "test",
       "id" : "dndnode_0.9926356046608611"
+    }
+  }, {
+    "name" : "parameters",
+    "type" : "parameter",
+    "nodeType" : "parameter",
+    "description" : "",
+    "properties" : {
+      "testSub" : "testVal"
+    }
+  }, {
+    "name" : "workflowParameters",
+    "type" : "workflowParameter",
+    "nodeType" : "workflowParameter",
+    "description" : "",
+    "properties" : {
+      "testParaam" : "testPV"
     }
   } ]
 }
