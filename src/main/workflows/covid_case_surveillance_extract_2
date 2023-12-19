@@ -1,0 +1,108 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "sense_incoming_csv_file",
+    "type" : "airflow.sensors.s3_key_sensor.S3KeySensor",
+    "nodeType" : "trigger",
+    "description" : "Use this file sensor to sense any incoming CSV files at the configured file path",
+    "properties" : {
+      "retries" : 0,
+      "wildcard_match" : true,
+      "retry_delay" : 0,
+      "dependsOn" : [ ],
+      "ui" : {
+        "x" : 30,
+        "y" : 30
+      },
+      "poke_interval" : 30,
+      "bucket_key" : "s3://datamorph-demo/datasets/covid_case_surveillance/markers/preprocessed/covid_data.csv.marker",
+      "id" : "b4246a6b-0f97-4ff5-bde4-a2039d69a1f8",
+      "timeout" : 300
+    }
+  }, {
+    "name" : "covid_extract_pipeline",
+    "type" : "datamorphairflow.actions.databricks.DMDatabricksRunNowJobOperator",
+    "nodeType" : "action",
+    "description" : "",
+    "properties" : {
+      "retries" : 0,
+      "outputTo" : [ "Success", "Failure" ],
+      "polling_period_seconds" : 30,
+      "dependsOn" : [ "sense_incoming_csv_file" ],
+      "retry_delay" : 0,
+      "ui" : {
+        "x" : 215,
+        "y" : 26
+      },
+      "pipeline_id" : 1802,
+      "databricks_retry_limit" : 3,
+      "id" : "d0cc04ba-a388-40bb-af1a-656b72b190bb"
+    }
+  }, {
+    "name" : "post_process",
+    "type" : "airflow.operators.bash.BashOperator",
+    "nodeType" : "action",
+    "description" : "Move the processed_file",
+    "properties" : {
+      "retries" : 0,
+      "outputTo" : [ "Success", "Failure" ],
+      "dependsOn" : [ "covid_extract_pipeline:Success" ],
+      "retry_delay" : 0,
+      "ui" : {
+        "x" : 416,
+        "y" : 30
+      },
+      "trigger_rule" : "all_success",
+      "bash_command" : "aws s3 mv s3://datamorph-demo/datasets/covid_case_surveillance/markers/preprocessed/covid_data.csv.marker s3://datamorph-demo/datasets/covid_case_surveillance/markers/processed/covid_data.csv.marker",
+      "id" : "5a31a0b6-7701-4437-8230-b36d3d5773cd"
+    }
+  }, {
+    "name" : "success",
+    "type" : "datamorphairflow.actions.email.DMEmailOperator",
+    "nodeType" : "action",
+    "description" : "",
+    "properties" : {
+      "retries" : 0,
+      "outputTo" : [ "Success", "Failure" ],
+      "html_content" : "Covid Surveillance Pipeline Success Message",
+      "from_id" : "datamorph@kwartile.com",
+      "dependsOn" : [ "post_process:Success" ],
+      "retry_delay" : 0,
+      "ui" : {
+        "x" : 651,
+        "y" : 29
+      },
+      "subject" : "DataMorph Application Success Message",
+      "trigger_rule" : "all_success",
+      "to" : "vinay.joshi@kwartile.com",
+      "id" : "efd6975f-ffaf-4583-abee-28450e64e5f5"
+    }
+  }, {
+    "name" : "failure",
+    "type" : "airflow.contrib.operators.slack_webhook_operator.SlackWebhookOperator",
+    "nodeType" : "action",
+    "description" : "",
+    "properties" : {
+      "retries" : 0,
+      "outputTo" : [ "Success", "Failure" ],
+      "retry_delay" : 0,
+      "dependsOn" : [ "covid_extract_pipeline:Failure", "post_process:Failure" ],
+      "ui" : {
+        "x" : 600,
+        "y" : 165
+      },
+      "trigger_rule" : "one_failed",
+      "channel" : "#datamorph-workflow-notifications",
+      "id" : "9f8a47b5-87ce-4a2b-bbbf-a6280bff1d0d",
+      "message" : "Covid case workflow failure notification",
+      "webhook_token" : "/T0EJ4596J/B042AFK5LCC/JdN2OD1lbXLzfZyATgFNLjAg",
+      "username" : "DataMorph Workflow Notification",
+      "http_conn_id" : "datamorph_slack"
+    }
+  } ]
+}
