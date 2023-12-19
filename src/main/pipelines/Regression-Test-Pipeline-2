@@ -20,14 +20,18 @@
     "description" : "",
     "properties" : {
       "schema" : "s3://datamorph-dev/workspace-sowmya/dataset/cts/icd10cm-codes-2023-schema.csv",
-      "path" : "s3://datamorph-dev/workspace-sowmya/dataset/cts/icd10cm-codes-2023.txt",
+      "select" : "*",
+      "footer" : 0,
+      "spark.sql.files.ignoreCorruptFiles" : false,
+      "batch" : true,
+      "format" : "text",
+      "distinct" : false,
+      "path" : "s3a://datamorph-dev/workspace-sowmya/dataset/cts/icd10cm-codes-2023.txt",
+      "spark.sql.files.ignoreMissingFiles" : false,
       "ui" : {
         "x" : 44,
         "y" : 43
       },
-      "footer" : 0,
-      "batch" : true,
-      "format" : "text",
       "header" : 0,
       "id" : "4cf3ebdf-fe1d-4147-b150-f5d672f145a5",
       "recursiveFileLookup" : false
@@ -45,7 +49,7 @@
         "y" : 40
       },
       "dataFormat" : "csv",
-      "schemaLocation" : "s3://datamorph-dev/output/regressiontest/schema",
+      "schemaLocation" : "s3a://datamorph-dev/output/regressiontest/schema",
       "batch" : true,
       "id" : "c21c0854-ec3c-4cd1-819a-646dfb3e761e",
       "inferSchema" : true,
