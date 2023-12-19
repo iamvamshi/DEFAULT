@@ -1,0 +1,39 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "action_trigger_1",
+    "type" : "datamorphairflow.actions.empty.DMEmptyOperator",
+    "nodeType" : "trigger",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ ],
+      "ui" : {
+        "x" : 25,
+        "y" : 25
+      },
+      "id" : "c2840f15-2e71-4bcf-a606-379072164c7e"
+    }
+  }, {
+    "name" : "datamorph_pipeline_1",
+    "type" : "datamorphairflow.actions.databricks.DMDatabricksRunNowJobOperator",
+    "nodeType" : "action",
+    "description" : "test.",
+    "properties" : {
+      "retries" : 0,
+      "outputTo" : [ "Success", "Failure" ],
+      "retry_delay" : 0,
+      "dependsOn" : [ "action_trigger_1" ],
+      "ui" : {
+        "x" : 175,
+        "y" : 25
+      },
+      "pipeline_id" : 3441,
+      "id" : "41cdb9f5-3e3c-473a-bbf7-840ab8ca424e"
+    }
+  } ]
+}
