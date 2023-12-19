@@ -1,0 +1,92 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "snowflake_1",
+    "type" : "snowflake",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "keep_column_case" : "off",
+      "autopushdown" : "off",
+      "pem_private_key" : "${CONNECTION__ID__XXX.pem_private_key}",
+      "select" : "*",
+      "designSchema" : 37,
+      "distinct" : false,
+      "ui" : {
+        "x" : 375,
+        "y" : 195
+      },
+      "use_copy_unload" : false,
+      "sfUrl" : "${CONNECTION__ID__XXX.sfUrl}",
+      "connection" : 48,
+      "id" : "dndnode_0.5920433605589679",
+      "sfAuthenticator" : "${CONNECTION__ID__XXX.sfAuthenticator}",
+      "continue_on_error" : "off",
+      "dependsOn" : [ ],
+      "format" : "net.snowflake.spark.snowflake",
+      "sfPassword" : "${CONNECTION__ID__XXX.sfPassword}",
+      "batch" : true,
+      "dbtable" : "customer_loan",
+      "sfDatabase" : "datmorph_dev",
+      "sfCompress" : "off",
+      "partition_size_in_mb" : 100,
+      "connectionName" : "snowflake_conn",
+      "usestagingtable" : "off",
+      "sfSchema" : "customer_schema",
+      "sfUser" : "${CONNECTION__ID__XXX.sfUser}"
+    }
+  }, {
+    "name" : "sql_1",
+    "type" : "sql",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "snowflake_1" ],
+      "ui" : {
+        "x" : 705,
+        "y" : 195
+      },
+      "id" : "dndnode_0.682787405519286",
+      "sql" : "select * from snowflake_1 limit 5"
+    }
+  }, {
+    "name" : "test",
+    "type" : "snowflake",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "truncate_columns" : false,
+      "autopushdown" : false,
+      "keep_column_case" : false,
+      "pem_private_key" : "${CONNECTION__ID__XXX.pem_private_key}",
+      "select" : "*",
+      "dependsOn" : [ "sql_1" ],
+      "batch" : true,
+      "format" : "net.snowflake.spark.snowflake",
+      "sfPassword" : "${CONNECTION__ID__XXX.sfPassword}",
+      "dbtable" : "customer_loan_sink",
+      "purge" : false,
+      "sfDatabase" : "datmorph_dev",
+      "mode" : "Overwrite",
+      "sfCompress" : false,
+      "ui" : {
+        "x" : 990,
+        "y" : 180
+      },
+      "sfUrl" : "${CONNECTION__ID__XXX.sfUrl}",
+      "truncate_table" : false,
+      "connection" : 48,
+      "connectionName" : "snowflake_conn",
+      "id" : "dndnode_0.8640536579851483",
+      "sfAuthenticator" : "${CONNECTION__ID__XXX.sfAuthenticator}",
+      "sfSchema" : "customer_schema",
+      "sfUser" : "${CONNECTION__ID__XXX.sfUser}",
+      "continue_on_error" : false
+    }
+  } ]
+}
