@@ -1,0 +1,155 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "Test description1",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "parameters",
+    "type" : "parameter",
+    "nodeType" : "parameter",
+    "description" : "",
+    "properties" : {
+      "param" : "paramValueEdit",
+      "deltaABC" : "testValABC"
+    }
+  }, {
+    "name" : "csv_1",
+    "type" : "filecsv",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "ignoreTrailingWhiteSpace" : false,
+      "designSchema" : 37,
+      "enforceSchema" : true,
+      "multiLine" : false,
+      "batch" : true,
+      "format" : "csv",
+      "inferSchema" : false,
+      "samplingRatio" : 1,
+      "maxColumns" : 20480,
+      "path" : "s3://datamorph-dev/datasets/customer_loan/customer-loan.csv",
+      "ignoreLeadingWhiteSpace" : false,
+      "ui" : {
+        "x" : 26,
+        "y" : 65
+      },
+      "header" : false,
+      "maxCharsPerColumn" : -1,
+      "id" : "40264c0e-4f62-4af4-a898-3c63fdd57cdb",
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "transform_columns_1",
+    "type" : "transformcolumnsprocessor",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "csv_1" ],
+      "ui" : {
+        "x" : 175,
+        "y" : 25
+      },
+      "transforms" : [ {
+        "name" : "testTransform",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "customerId", "first_name", "last_name" ],
+          "transformType" : "case-when",
+          "sql" : "case when {col} = '{val1}' then '{new_val1}' when {col} = '{val2}' then '{new_val2}' else '{default_value}' end"
+        }
+      }, {
+        "name" : "testTrans",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "customerId", "last_name", "address" ],
+          "transformType" : "base64(col)",
+          "sql" : "base64({col})"
+        }
+      }, {
+        "name" : "transformRule",
+        "type" : "customsql",
+        "properties" : {
+          "columns" : [ "customerId", "first_name", "last_name" ],
+          "transformType" : "case-when",
+          "sql" : "case when {col} = '{val1}' then '{new_val1}' when {col} = '{val2}' then '{new_val2}' else '{default_value}' end"
+        }
+      } ],
+      "id" : "0fb14b64-397b-4372-9d19-be07c1b28e28"
+    }
+  }, {
+    "name" : "session_1",
+    "type" : "sessionwindow",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "sessionGapDurationInSeconds" : 0,
+      "maximumSessionDurationInSeconds" : 0,
+      "dependsOn" : [ "transform_columns_1" ],
+      "ui" : {
+        "x" : 331,
+        "y" : 25
+      },
+      "batch" : true,
+      "timestampField" : "col",
+      "groupBy" : "col",
+      "id" : "25955dc5-fbb6-419a-ac64-e89ba9e7766e"
+    }
+  }, {
+    "name" : "snowflake_1",
+    "type" : "snowflake",
+    "nodeType" : "sink",
+    "description" : "sample description",
+    "properties" : {
+      "dependsOn" : [ "session_1" ],
+      "ui" : {
+        "x" : 496,
+        "y" : 115
+      },
+      "format" : "snowflake",
+      "batch" : true,
+      "sfUrl" : "testIdentifier",
+      "sfPassword" : "testPWD123",
+      "dbtable" : "all",
+      "sfDatabase" : "users",
+      "id" : "d399bb34-dae9-45a9-9481-700f55db9922",
+      "sfSchema" : "TestSchema",
+      "sfUser" : "testUname"
+    }
+  }, {
+    "name" : "sql_1",
+    "type" : "sql",
+    "nodeType" : "processor",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "csv_1" ],
+      "ui" : {
+        "x" : 175,
+        "y" : 114
+      },
+      "id" : "2b525695-ef29-4452-b572-e639f90effa3",
+      "sql" : "company_name,\naddress,\ncounty"
+    }
+  }, {
+    "name" : "delta_1",
+    "type" : "delta",
+    "nodeType" : "sink",
+    "description" : "testing",
+    "properties" : {
+      "foreachSql" : "SELECT * FROM sql_1",
+      "path" : "s3://datamorph-qa/output/",
+      "dependsOn" : [ "sql_1" ],
+      "ui" : {
+        "x" : 335,
+        "y" : 115
+      },
+      "replaceWhere" : "SELECT * FROM ALL",
+      "batch" : false,
+      "format" : "delta",
+      "overwriteSchema" : false,
+      "id" : "1f7f1cfc-987a-4624-afd1-1e42b69f40f1",
+      "mergeSchema" : false
+    }
+  } ]
+}
