@@ -1,0 +1,101 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "action_trigger_1",
+    "type" : "datamorphairflow.actions.empty.DMEmptyOperator",
+    "nodeType" : "trigger",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ ],
+      "ui" : {
+        "x" : 15,
+        "y" : 45
+      },
+      "width" : 114,
+      "icon" : "https://dev-api.datamorph.ai/iconslight/action-trigger.svg",
+      "extras" : "Action Trigger",
+      "style" : {
+        "backgroundColor" : "#F5785F"
+      },
+      "position" : {
+        "x" : 25,
+        "y" : 25
+      },
+      "label" : "action_trigger_1",
+      "id" : "fb97be99-7080-4efc-ad47-e4c92ca5e0cf",
+      "height" : 65
+    }
+  }, {
+    "name" : "branch_1",
+    "type" : "datamorphairflow.actions.branch.DMBranchOnReturnValueOperator",
+    "nodeType" : "action",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "action_trigger_1" ],
+      "ui" : {
+        "x" : 180,
+        "y" : 45
+      },
+      "width" : 114,
+      "icon" : "https://dev-api.datamorph.ai/iconslight/branch.svg",
+      "extras" : "Branch",
+      "style" : {
+        "backgroundColor" : "#424EBC"
+      },
+      "position" : {
+        "x" : 180,
+        "y" : 30
+      },
+      "label" : "branch_1",
+      "id" : "050b11f0-be6b-4836-825c-2404beaf9b08",
+      "branches" : [ {
+        "name" : "test",
+        "properties" : {
+          "match_expression" : "Success",
+          "branch" : [ ]
+        }
+      }, {
+        "name" : "test1",
+        "properties" : {
+          "match_expression" : "Failure",
+          "branch" : [ "bash_1" ]
+        }
+      } ],
+      "height" : 65
+    }
+  }, {
+    "name" : "bash_1",
+    "type" : "airflow.operators.bash.BashOperator",
+    "nodeType" : "action",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ "branch_1:test1" ],
+      "icon" : "https://dev-api.datamorph.ai/iconslight/bash.svg",
+      "extras" : "Bash",
+      "bash_command" : "cmd",
+      "label" : "bash_1",
+      "retries" : 0,
+      "outputTo" : [ "Success", "Failure" ],
+      "retry_delay" : 0,
+      "ui" : {
+        "x" : 390,
+        "y" : 45
+      },
+      "width" : 114,
+      "style" : {
+        "backgroundColor" : "#424EBC"
+      },
+      "position" : {
+        "x" : 360,
+        "y" : 30
+      },
+      "id" : "dndnode_0.5078642756971481",
+      "height" : 65
+    }
+  } ]
+}
