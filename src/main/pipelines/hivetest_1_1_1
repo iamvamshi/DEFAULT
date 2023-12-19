@@ -1,0 +1,65 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "csv_2",
+    "type" : "filecsv",
+    "nodeType" : "source",
+    "description" : "",
+    "properties" : {
+      "schema" : "patient_id LONG, cdc_case_earliest_dt DATE, cdc_report_dt DATE, pos_spec_dt DATE, onset_dt DATE, current_status STRING, hosp_yn STRING, icu_yn STRING, death_yn STRING, medcond_yn STRING",
+      "ignoreTrailingWhiteSpace" : false,
+      "select" : "*",
+      "enforceSchema" : true,
+      "dependsOn" : [ ],
+      "multiLine" : false,
+      "batch" : true,
+      "format" : "csv",
+      "distinct" : false,
+      "inferSchema" : false,
+      "samplingRatio" : 1,
+      "maxColumns" : 20480,
+      "ignoreLeadingWhiteSpace" : false,
+      "path" : "s3://datamorph-demo/datasets/covid_case_surveillance/covid_data.csv",
+      "ui" : {
+        "x" : 75,
+        "y" : 120
+      },
+      "spark" : {
+        "sql" : {
+          "files" : {
+            "ignoreCorruptFiles" : false,
+            "ignoreMissingFiles" : false
+          }
+        }
+      },
+      "header" : false,
+      "maxCharsPerColumn" : -1,
+      "id" : "dndnode_0.9141447631560233",
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "table_1",
+    "type" : "table",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "path" : "s3://datamorph-dev/output/csv2hive/customer",
+      "select" : "*",
+      "dependsOn" : [ "csv_2" ],
+      "ui" : {
+        "x" : 300,
+        "y" : 120
+      },
+      "batch" : true,
+      "distinct" : false,
+      "id" : "dndnode_0.6252797673524089",
+      "table" : "covid_data_demo",
+      "createIfNotExists" : true
+    }
+  } ]
+}
