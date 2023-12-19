@@ -1,0 +1,118 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "created for testing reactFlow",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "action_trigger_1",
+    "type" : "datamorphairflow.actions.empty.DMEmptyOperator",
+    "nodeType" : "trigger",
+    "description" : "",
+    "properties" : {
+      "dependsOn" : [ ],
+      "ui" : {
+        "x" : 105,
+        "y" : 105
+      },
+      "id" : "dndnode_0.6652775549718215"
+    }
+  }, {
+    "name" : "branch_Edit",
+    "type" : "datamorphairflow.actions.branch.DMBranchOnReturnValueOperator",
+    "nodeType" : "action",
+    "description" : "demo desc",
+    "properties" : {
+      "retries" : 0,
+      "dependsOn" : [ "action_trigger_1" ],
+      "retry_delay" : 0,
+      "ui" : {
+        "x" : 270,
+        "y" : 105
+      },
+      "id" : "dndnode_0.5563073988398408",
+      "branches" : [ {
+        "name" : "test",
+        "properties" : {
+          "match_expression" : "Success",
+          "branch" : [ "email_1" ]
+        }
+      }, {
+        "name" : "testNew",
+        "properties" : {
+          "match_expression" : "failure",
+          "branch" : [ "email_2" ]
+        }
+      }, {
+        "name" : "demo",
+        "description" : "test",
+        "properties" : {
+          "match_expression" : "TRUE",
+          "branch" : [ "email_2" ]
+        }
+      } ]
+    }
+  }, {
+    "name" : "email_1",
+    "type" : "datamorphairflow.actions.email.DMEmailOperator",
+    "nodeType" : "action",
+    "description" : "",
+    "properties" : {
+      "cc" : "cc",
+      "retries" : 0,
+      "outputTo" : [ "Success", "Failure" ],
+      "html_content" : "body",
+      "from_id" : "from",
+      "bcc" : "",
+      "dependsOn" : [ "branch_Edit:test" ],
+      "retry_delay" : 0,
+      "ui" : {
+        "x" : 450,
+        "y" : 30
+      },
+      "subject" : "sub",
+      "to" : "to",
+      "id" : "dndnode_0.47596146107986614"
+    }
+  }, {
+    "name" : "email_2",
+    "type" : "datamorphairflow.actions.email.DMEmailOperator",
+    "nodeType" : "action",
+    "description" : "",
+    "properties" : {
+      "cc" : "cc",
+      "retries" : 0,
+      "outputTo" : [ "Success", "Failure" ],
+      "html_content" : "body",
+      "from_id" : "from",
+      "bcc" : "",
+      "dependsOn" : [ "branch_Edit:test1Edit", "branch_Edit:test1Edited", "branch_Edit:testNew", "branch_Edit:demo" ],
+      "retry_delay" : 0,
+      "ui" : {
+        "x" : 450,
+        "y" : 105
+      },
+      "subject" : "sub",
+      "to" : "to",
+      "id" : "dndnode_0.5205910569467236"
+    }
+  }, {
+    "name" : "parameters",
+    "type" : "parameter",
+    "nodeType" : "parameter",
+    "description" : "",
+    "properties" : {
+      "delta" : "paramValue",
+      "TESTKEY" : "TESTVAL"
+    }
+  }, {
+    "name" : "workflowParameters",
+    "type" : "workflowParameter",
+    "nodeType" : "workflowParameter",
+    "description" : "",
+    "properties" : {
+      "param1" : "p"
+    }
+  } ]
+}
