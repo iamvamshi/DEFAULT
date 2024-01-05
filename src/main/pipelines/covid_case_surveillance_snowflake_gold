@@ -3,7 +3,28 @@
     "version" : "1.1.395.0",
     "origin" : "",
     "description" : "Comprises the components of the gold layer by aggregating the data in delta format for use in BI reporting and analytics tools.",
-    "tags" : [ ]
+    "tags" : [ {
+      "id" : 3,
+      "name" : "testAdd",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656577044000,
+      "createdBy" : 1
+    }, {
+      "id" : 4,
+      "name" : "pipelineTestTag",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656577803000,
+      "createdBy" : 1
+    }, {
+      "id" : 2,
+      "name" : "testNew",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1656576269000,
+      "createdBy" : 1
+    } ]
   },
   "workflow" : [ {
     "name" : "parameters",
