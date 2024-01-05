@@ -4,13 +4,6 @@
     "origin" : "",
     "description" : "demo description",
     "tags" : [ {
-      "id" : 625,
-      "name" : "workflowTag",
-      "type" : "DEFAULT",
-      "description" : null,
-      "createdDate" : 1685697361000,
-      "createdBy" : 31
-    }, {
       "id" : 294,
       "name" : "testDemo",
       "type" : "DEFAULT",
@@ -23,6 +16,13 @@
       "type" : "DEFAULT",
       "description" : null,
       "createdDate" : 1662960127000,
+      "createdBy" : 31
+    }, {
+      "id" : 625,
+      "name" : "workflowTag",
+      "type" : "DEFAULT",
+      "description" : null,
+      "createdDate" : 1685697361000,
       "createdBy" : 31
     } ]
   },
@@ -43,7 +43,7 @@
       "dependsOn" : [ ],
       "ui" : {
         "x" : 30,
-        "y" : 105
+        "y" : 210
       },
       "id" : "e959c231-7383-49b1-806f-945a460f88bc"
     }
@@ -58,7 +58,7 @@
       "dependsOn" : [ "action_trigger_1" ],
       "ui" : {
         "x" : 195,
-        "y" : 105
+        "y" : 210
       },
       "id" : "3fe6a5b2-4d7f-4bcf-a60e-709dee338804",
       "branches" : [ {
@@ -128,8 +128,8 @@
       "dependsOn" : [ "branch_1:Failure" ],
       "retry_delay" : 0,
       "ui" : {
-        "x" : 390,
-        "y" : 135
+        "x" : 345,
+        "y" : 330
       },
       "trigger_rule" : "one_failed",
       "bash_command" : "cmd",
@@ -146,8 +146,8 @@
       "retry_delay" : 0,
       "dependsOn" : [ "branch_1:sucess" ],
       "ui" : {
-        "x" : 390,
-        "y" : 45
+        "x" : 345,
+        "y" : 120
       },
       "bash_command" : "cmd",
       "id" : "20e10cbe-b353-435e-bd18-4d77eedbe5e9"
@@ -162,8 +162,8 @@
       "retry_delay" : 0,
       "dependsOn" : [ "action_trigger_1" ],
       "ui" : {
-        "x" : 450,
-        "y" : 240
+        "x" : 345,
+        "y" : 210
       },
       "id" : "dndnode_0.9060263446190713",
       "branches" : [ {
@@ -202,8 +202,8 @@
       "retry_delay" : 0,
       "dependsOn" : [ "action_trigger_1" ],
       "ui" : {
-        "x" : 660,
-        "y" : 225
+        "x" : 495,
+        "y" : 210
       },
       "id" : "dndnode_0.4316162102551593",
       "branches" : [ {
@@ -248,8 +248,8 @@
       "retry_delay" : 0,
       "dependsOn" : [ "action_trigger_1" ],
       "ui" : {
-        "x" : 810,
-        "y" : 225
+        "x" : 645,
+        "y" : 210
       },
       "id" : "dndnode_0.5415984110899208",
       "branches" : [ {
@@ -299,8 +299,8 @@
       "retry_delay" : 0,
       "dependsOn" : [ "action_trigger_1" ],
       "ui" : {
-        "x" : 960,
-        "y" : 225
+        "x" : 810,
+        "y" : 210
       },
       "id" : "dndnode_0.7238145939938201",
       "branches" : [ {
@@ -355,8 +355,8 @@
       "retry_delay" : 0,
       "dependsOn" : [ "action_trigger_1" ],
       "ui" : {
-        "x" : 600,
-        "y" : 90
+        "x" : 960,
+        "y" : 210
       },
       "id" : "dndnode_0.15554210520406997",
       "branches" : [ {
