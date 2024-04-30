@@ -1,0 +1,155 @@
+{
+  "metadata" : {
+    "version" : "1.1.395.0",
+    "origin" : "",
+    "description" : "Pipeline to test schema processor",
+    "name" : "SchemaProcessorPipeline",
+    "tags" : [ ]
+  },
+  "workflow" : [ {
+    "name" : "csv_1",
+    "type" : "filecsv",
+    "nodeType" : "source",
+    "description" : "Test Desc",
+    "properties" : {
+      "ignoreTrailingWhiteSpace" : false,
+      "enforceSchema" : true,
+      "dependsOn" : [ ],
+      "multiLine" : false,
+      "batch" : true,
+      "format" : "csv",
+      "inferSchema" : false,
+      "samplingRatio" : 1,
+      "maxColumns" : 20480,
+      "path" : "s3://datamorph-qa/output/",
+      "ignoreLeadingWhiteSpace" : false,
+      "ui" : {
+        "x" : 23,
+        "y" : 52
+      },
+      "header" : false,
+      "maxCharsPerColumn" : -1,
+      "id" : "d731b3cc-25af-4a59-ab71-5154db87ef39",
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "schema_1",
+    "type" : "schemaprocessor",
+    "nodeType" : "processor",
+    "description" : "Sample Description testing",
+    "properties" : {
+      "outputTo" : "schemaDiff",
+      "dependsOn" : [ "csv_1" ],
+      "ui" : {
+        "x" : 172,
+        "y" : 52
+      },
+      "dataFormat" : "xml",
+      "batch" : true,
+      "id" : "8fd12347-fe78-4f06-bb6a-0eb7e6fea56c",
+      "inferSchema" : false,
+      "compatibility" : "MERGE_ALL_COLUMNS"
+    }
+  }, {
+    "name" : "csv_2",
+    "type" : "filecsv",
+    "nodeType" : "sink",
+    "description" : "Test Demo desc",
+    "properties" : {
+      "path" : "file:///${outputDir}/customerloan.delta123",
+      "ignoreLeadingWhiteSpace" : true,
+      "ignoreTrailingWhiteSpace" : true,
+      "dependsOn" : [ "schema_1_schemaDiff" ],
+      "ui" : {
+        "x" : 342,
+        "y" : 103
+      },
+      "escapeQuotes" : true,
+      "batch" : true,
+      "format" : "csv",
+      "header" : false,
+      "id" : "1579e412-d7fc-4db0-9347-1ad063882aa4",
+      "quoteAll" : false
+    }
+  }, {
+    "name" : "table_1",
+    "type" : "table",
+    "nodeType" : "sink",
+    "description" : "test description",
+    "properties" : {
+      "dependsOn" : [ "schema_1" ],
+      "ui" : {
+        "x" : 340,
+        "y" : 13
+      },
+      "batch" : true,
+      "distinct" : false,
+      "id" : "d7821d0d-99d7-4913-9089-fc38d44f2e13",
+      "table" : "${redis_table_name1}",
+      "createIfNotExists" : false
+    }
+  }, {
+    "name" : "fixed_width_1",
+    "type" : "filefixedwidth",
+    "nodeType" : "source",
+    "description" : "This is pipelline sample desc",
+    "properties" : {
+      "schema" : "test schema data",
+      "path" : "s3://datamorph-qa/output/",
+      "outputTo" : [ "sucess", "failure" ],
+      "dependsOn" : [ ],
+      "ui" : {
+        "x" : 490,
+        "y" : 62
+      },
+      "footer" : 0,
+      "batch" : true,
+      "format" : "text",
+      "header" : 0,
+      "id" : "9ee00510-c58a-4816-8567-0b52a1aedb2d",
+      "recursiveFileLookup" : false
+    }
+  }, {
+    "name" : "csv_3",
+    "type" : "filecsv",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "path" : "s3://datamorph-qa/output/",
+      "ignoreLeadingWhiteSpace" : true,
+      "ignoreTrailingWhiteSpace" : true,
+      "dependsOn" : [ "fixed_width_1_failure" ],
+      "ui" : {
+        "x" : 677,
+        "y" : 111
+      },
+      "escapeQuotes" : true,
+      "batch" : true,
+      "format" : "csv",
+      "header" : false,
+      "id" : "93a05a8a-1ff0-4505-98db-044f5d2bebb2",
+      "quoteAll" : false
+    }
+  }, {
+    "name" : "csv_4",
+    "type" : "filecsv",
+    "nodeType" : "sink",
+    "description" : "",
+    "properties" : {
+      "path" : "c://testsrc",
+      "ignoreLeadingWhiteSpace" : true,
+      "ignoreTrailingWhiteSpace" : true,
+      "dependsOn" : [ "fixed_width_1_sucess" ],
+      "ui" : {
+        "x" : 677,
+        "y" : 16
+      },
+      "escapeQuotes" : true,
+      "batch" : true,
+      "format" : "csv",
+      "header" : false,
+      "id" : "3aa5f441-b885-4ed5-ae69-7aaa95c01de7",
+      "quoteAll" : false
+    }
+  } ]
+}
